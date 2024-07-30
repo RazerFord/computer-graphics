@@ -8,7 +8,7 @@ GLuint createShader(const std::string & shaderSource, const GLenum type, const b
 template <typename Get, typename Info>
 std::string readInfoLog(const GLuint shader, int & success, const Get get, const Info info);
 
-RenderProgram::RenderProgram(const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
+ShaderProgram::ShaderProgram(const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
 {
 	GLuint vertexShader = createShader(vertexShaderSource, GL_VERTEX_SHADER);
 	if (vertexShader == 0)
@@ -41,46 +41,46 @@ RenderProgram::RenderProgram(const std::string & vertexShaderSource, const std::
 	_isCompiled = success != 0;
 }
 
-RenderProgram::RenderProgram(RenderProgram && renderProgram)
+ShaderProgram::ShaderProgram(ShaderProgram && shaderProgram)
 {
 	safeReset();
 
-	_isCompiled = renderProgram._isCompiled;
-	_programID = renderProgram._programID;
+	_isCompiled = shaderProgram._isCompiled;
+	_programID = shaderProgram._programID;
 
-	renderProgram._programID = 0;
-	renderProgram._isCompiled = false;
+	shaderProgram._programID = 0;
+	shaderProgram._isCompiled = false;
 }
 
-RenderProgram::~RenderProgram()
+ShaderProgram::~ShaderProgram()
 {
 	safeReset();
 }
 
-RenderProgram & RenderProgram::operator=(RenderProgram && renderProgram) noexcept
+ShaderProgram & ShaderProgram::operator=(ShaderProgram && shaderProgram) noexcept
 {
-	if (this == &renderProgram)
+	if (this == &shaderProgram)
 	{
 		return *this;
 	}
 
 	safeReset();
 
-	_isCompiled = renderProgram._isCompiled;
-	_programID = renderProgram._programID;
+	_isCompiled = shaderProgram._isCompiled;
+	_programID = shaderProgram._programID;
 
-	renderProgram._programID = 0;
-	renderProgram._isCompiled = false;
+	shaderProgram._programID = 0;
+	shaderProgram._isCompiled = false;
 
 	return *this;
 }
 
-void RenderProgram::use() const
+void ShaderProgram::use() const
 {
 	glUseProgram(_programID);
 }
 
-void RenderProgram::safeReset() noexcept
+void ShaderProgram::safeReset() noexcept
 {
 	if (_isCompiled)
 	{
@@ -88,18 +88,18 @@ void RenderProgram::safeReset() noexcept
 	}
 }
 
-void RenderProgram::reset() noexcept
+void ShaderProgram::reset() noexcept
 {
 	_isCompiled = false;
 	glDeleteProgram(_programID);
 }
 
-bool RenderProgram::isCompiled() const
+bool ShaderProgram::isCompiled() const
 {
 	return _isCompiled;
 }
 
-RenderProgram::operator bool() const
+ShaderProgram::operator bool() const
 {
 	return _isCompiled;
 }

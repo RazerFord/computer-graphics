@@ -5,18 +5,18 @@
 
 namespace render
 {
-class RenderProgram
+class ShaderProgram
 {
 private:
 	bool _isCompiled = false;
 	GLuint _programID = 0;
 
 public:
-	RenderProgram(const std::string & vertexShaderSource, const std::string & fragmentShaderSource);
-	RenderProgram(RenderProgram && renderProgram);
-	~RenderProgram();
+	ShaderProgram(const std::string & vertexShaderSource, const std::string & fragmentShaderSource);
+	ShaderProgram(ShaderProgram && shaderProgram);
+	~ShaderProgram();
 
-	RenderProgram & operator=(RenderProgram && renderProgram) noexcept;
+	ShaderProgram & operator=(ShaderProgram && shaderProgram) noexcept;
 
 	void use() const;
 
