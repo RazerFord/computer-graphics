@@ -8,6 +8,7 @@ add_executable(BattleCity
     src/render/ShaderProgram.cpp
     src/resources/ResourceManager.hpp
     src/resources/ResourceManager.cpp
+    src/resources/stb_image.h
 )
 
 add_subdirectory(external/glfw)

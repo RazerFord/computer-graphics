@@ -7,6 +7,9 @@
 #include <sstream>
 #include <string>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 namespace
 {
 const char pathSeparator =
@@ -67,10 +70,29 @@ std::shared_ptr<render::ShaderProgram> ResourceManager::getShader(const std::str
 	return nullptr;
 }
 
+void ResourceManager::loadTexture(const std::string & textureName, const std::string & texturePath)
+{
+	int channel = 0, width = 0, height = 0;
+
+	stbi_set_flip_vertically_on_load(1);
+	stbi_uc * pixels = stbi_load(getPath(texturePath).c_str(), &width, &height, &channel, 0);
+	if (!pixels)
+	{
+		std::cerr << "Can't load texture \"" << texturePath << "\"" << std::endl;
+		return;
+	}
+
+	stbi_image_free(pixels);
+}
+
+std::string ResourceManager::getPath(const std::string & relativePath) const
+{
+	return _pathToExecutable + pathSeparator + relativePath;
+}
 
 std::string ResourceManager::readFile(const std::string & relativePathToFile) const
 {
-	std::ifstream file(_pathToExecutable + pathSeparator + relativePathToFile, std::ios_base::in & std::ios_base::binary);
+	std::ifstream file(getPath(relativePathToFile), std::ios_base::in & std::ios_base::binary);
 
 	if (!file.is_open())
 	{
