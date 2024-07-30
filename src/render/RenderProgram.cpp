@@ -23,13 +23,13 @@ RenderProgram::RenderProgram(const std::string & vertexShaderSource, const std::
 		return;
 	}
 
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	_programID = glCreateProgram();
+	glAttachShader(_programID, vertexShader);
+	glAttachShader(_programID, fragmentShader);
+	glLinkProgram(_programID);
 
 	int success;
-	std::string infoLog = readInfoLog(shaderProgram, success, glGetProgramiv, glGetProgramInfoLog);
+	std::string infoLog = readInfoLog(_programID, success, glGetProgramiv, glGetProgramInfoLog);
 	if (success == 0)
 	{
 		std::cerr << infoLog << std::endl;
@@ -114,9 +114,12 @@ GLuint createShader(const std::string & shaderSource, const GLenum type, const b
 	glCompileShader(shader);
 
 	std::string infoLog = readInfoLog(shader, success, glGetShaderiv, glGetShaderInfoLog);
-	if (success == 0 && printLog)
+	if (success == 0)
 	{
-		std::cerr << infoLog << std::endl;
+		if (printLog)
+		{
+			std::cerr << infoLog << std::endl;
+		}
 		return 0;
 	}
 

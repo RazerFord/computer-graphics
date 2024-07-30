@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include "render/RenderProgram.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -78,51 +78,7 @@ int main(void)
 
 	glClearColor(0.4f, 0.3f, 0.8f, 1.0f);
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-	glCompileShader(vertexShader);
-
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-				  << infoLog << std::endl;
-		return -1;
-	}
-
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-	glCompileShader(fragmentShader);
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
-				  << infoLog << std::endl;
-		return -1;
-	}
-
-	GLuint shaderProgram = glCreateProgram();
-	for (const auto & shader: {vertexShader, fragmentShader})
-		glAttachShader(shaderProgram, shader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-		std::cout << "ERROR::PROGRAM::COMPILATION_FAILED\n"
-				  << infoLog << std::endl;
-		return -1;
-	}
-
-	for (const auto & shader: {vertexShader, fragmentShader})
-		glDeleteShader(shader);
+	render::RenderProgram program(vertexShaderSource, fragmentShaderSource);
 
 	GLuint VBO, VAO;
 
@@ -142,7 +98,7 @@ int main(void)
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shaderProgram);
+		program.use();
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -154,7 +110,6 @@ int main(void)
 	}
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
 	return 0;
