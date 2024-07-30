@@ -6,7 +6,7 @@ namespace render
 GLuint createShader(const std::string & shaderSource, const GLenum type, const bool printLog = true);
 
 template <typename Get, typename Info>
-std::string readInfoLog(const GLuint shader, int & success, const Get get, const Info info);
+std::string readInfoLog(const GLuint shader, int & success, const GLenum type, const Get get, const Info info);
 
 ShaderProgram::ShaderProgram(const std::string & vertexShaderSource, const std::string & fragmentShaderSource)
 {
@@ -29,7 +29,7 @@ ShaderProgram::ShaderProgram(const std::string & vertexShaderSource, const std::
 	glLinkProgram(_programID);
 
 	int success;
-	std::string infoLog = readInfoLog(_programID, success, glGetProgramiv, glGetProgramInfoLog);
+	std::string infoLog = readInfoLog(_programID, success, GL_LINK_STATUS, glGetProgramiv, glGetProgramInfoLog);
 	if (success == 0)
 	{
 		std::cerr << infoLog << std::endl;
@@ -113,7 +113,7 @@ GLuint createShader(const std::string & shaderSource, const GLenum type, const b
 	glShaderSource(shader, 1, &source, nullptr);
 	glCompileShader(shader);
 
-	std::string infoLog = readInfoLog(shader, success, glGetShaderiv, glGetShaderInfoLog);
+	std::string infoLog = readInfoLog(shader, success, GL_COMPILE_STATUS, glGetShaderiv, glGetShaderInfoLog);
 	if (success == 0)
 	{
 		if (printLog)
@@ -127,11 +127,11 @@ GLuint createShader(const std::string & shaderSource, const GLenum type, const b
 }
 
 template <typename Get, typename Info>
-std::string readInfoLog(const GLuint shader, int & success, const Get get, const Info info)
+std::string readInfoLog(const GLuint shader, int & success, const GLenum type, const Get get, const Info info)
 {
 	char infoLog[1024];
 
-	get(shader, GL_COMPILE_STATUS, &success);
+	get(shader, type, &success);
 
 	if (success == 0)
 	{
