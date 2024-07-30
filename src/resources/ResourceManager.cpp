@@ -1,5 +1,5 @@
 #include "ResourceManager.hpp"
-#include "../render/RenderProgram.hpp"
+#include "../render/ShaderProgram.hpp"
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -42,12 +42,12 @@ std::shared_ptr<render::ShaderProgram> ResourceManager::loadShader(
 		return nullptr;
 	}
 
-	auto sp = std::make_shared<render::ShaderProgram>(vertexShader, fragmentShader);
+	auto sp = std::make_shared<render::ShaderProgram>(vertexShaderSource, fragmentShaderSource);
 	if (!sp->isCompiled())
 	{
-		std::cerr << "Can't load shared program:\n"
+		std::cerr << "Can't load shader program:\n"
 				  << "Vertex: " << vertexShader << "\n"
-				  << "Fragment:" << fragmentShader << std::endl;
+				  << "Fragment: " << fragmentShader << std::endl;
 		return nullptr;
 	}
 
@@ -70,9 +70,9 @@ std::shared_ptr<render::ShaderProgram> ResourceManager::getShader(const std::str
 
 std::string ResourceManager::readFile(const std::string & relativePathToFile) const
 {
-	std::fstream file(_pathToExecutable + pathSeparator + relativePathToFile, std::ios_base::in & std::ios_base::binary);
+	std::ifstream file(_pathToExecutable + pathSeparator + relativePathToFile, std::ios_base::in & std::ios_base::binary);
 
-	if (!file)
+	if (!file.is_open())
 	{
 		std::cerr << "Failed opening file: " << relativePathToFile << std::endl;
 		return "";

@@ -1,4 +1,4 @@
-#include "RenderProgram.hpp"
+#include "ShaderProgram.hpp"
 #include <iostream>
 
 namespace render

@@ -4,8 +4,8 @@ project(BattleCity)
 
 add_executable(BattleCity 
     src/main.cpp
-    src/render/RenderProgram.hpp
-    src/render/RenderProgram.cpp
+    src/render/ShaderProgram.hpp
+    src/render/ShaderProgram.cpp
     src/resources/ResourceManager.hpp
     src/resources/ResourceManager.cpp
 )

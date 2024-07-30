@@ -1,4 +1,5 @@
-#include "render/RenderProgram.hpp"
+#include "render/ShaderProgram.hpp"
+#include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -25,21 +26,7 @@ float vertices[] = {
 	0.0F, 0.5F, 0.0F,
 	0.5F, -0.5F, 0.0F};
 
-const char * const vertexShaderSource = "#version 460 core\n"
-										"layout (location = 0) in vec3 aPos;"
-										"void main()\n"
-										"{\n"
-										"    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-										"}\0";
-
-const char * const fragmentShaderSource = "#version 460 core\n"
-										  "out vec4 fragColor;"
-										  "void main()\n"
-										  "{\n"
-										  "    fragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
-										  "}\0";
-
-int main(void)
+int main(int _, char ** argv)
 {
 	/* Initialize the library */
 	if (!glfwInit())
@@ -78,39 +65,41 @@ int main(void)
 
 	glClearColor(0.4f, 0.3f, 0.8f, 1.0f);
 
-	render::RenderProgram program(vertexShaderSource, fragmentShaderSource);
-
-	GLuint VBO, VAO;
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glCreateBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(0);
-
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
 	{
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		resources::ResourceManager manager(argv[0]);
+		auto program = manager.loadShader("triangle", "shaders/vertex.vs", "shaders/fragment.fs");
 
-		program.use();
+		GLuint VBO, VAO;
+
+		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+		glCreateBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-		/* Poll for and process events */
-		glfwPollEvents();
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		glEnableVertexAttribArray(0);
+
+		/* Loop until the user closes the window */
+		while (!glfwWindowShouldClose(window))
+		{
+			/* Render here */
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			program->use();
+			glBindVertexArray(VAO);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+
+			/* Swap front and back buffers */
+			glfwSwapBuffers(window);
+
+			/* Poll for and process events */
+			glfwPollEvents();
+		}
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
 	}
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-
 	glfwTerminate();
 	return 0;
 }
