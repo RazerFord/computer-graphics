@@ -6,6 +6,8 @@ add_executable(BattleCity
     src/main.cpp
     src/render/ShaderProgram.hpp
     src/render/ShaderProgram.cpp
+    src/render/Texture2D.hpp
+    src/render/Texture2D.cpp
     src/resources/ResourceManager.hpp
     src/resources/ResourceManager.cpp
     src/resources/stb_image.h

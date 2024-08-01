@@ -26,6 +26,11 @@ float vertices[] = {
 	0.0F, 0.5F, 0.0F,
 	0.5F, -0.5F, 0.0F};
 
+float colors[] = {
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0};
+
 int main(int _, char ** argv)
 {
 	/* Initialize the library */
