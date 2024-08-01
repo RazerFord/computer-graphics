@@ -1,4 +1,5 @@
 #include "render/ShaderProgram.hpp"
+#include "render/Texture2D.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -26,7 +27,7 @@ float vertices[] = {
 	0.0F, 0.5F, 0.0F,
 	0.5F, -0.5F, 0.0F};
 
-float colors[] = {
+float texCoord[] = {
 	0.0, 0.0,
 	0.5, 1.0,
 	1.0, 0.0};
@@ -68,23 +69,34 @@ int main(int _, char ** argv)
 	std::cout << "Renderer " << glGetString(GL_RENDERER) << std::endl;
 	std::cout << "OpenGL version " << glGetString(GL_VERSION) << std::endl;
 
-	glClearColor(0.4f, 0.3f, 0.8f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	{
 		resources::ResourceManager manager(argv[0]);
 		auto program = manager.loadShader("triangle", "shaders/vertex.vs", "shaders/fragment.fs");
+		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.png");
 
-		GLuint VBO, VAO;
+		GLuint tex_colors_vbo, points_vbo, points_vao;
 
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
+		glCreateBuffers(1, &tex_colors_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, tex_colors_vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
 
-		glCreateBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
+		glEnableVertexAttribArray(1);
+
+		glGenVertexArrays(1, &points_vao);
+		glBindVertexArray(points_vao);
+
+		glCreateBuffers(1, &points_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 		glEnableVertexAttribArray(0);
+
+		program->use();
+		program->setInt("tex", 0);
 
 		/* Loop until the user closes the window */
 		while (!glfwWindowShouldClose(window))
@@ -93,7 +105,8 @@ int main(int _, char ** argv)
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			program->use();
-			glBindVertexArray(VAO);
+			glBindVertexArray(points_vao);
+			texture->bind();
 			glDrawArrays(GL_TRIANGLES, 0, 3);
 
 			/* Swap front and back buffers */
@@ -102,8 +115,9 @@ int main(int _, char ** argv)
 			/* Poll for and process events */
 			glfwPollEvents();
 		}
-		glDeleteVertexArrays(1, &VAO);
-		glDeleteBuffers(1, &VBO);
+		glDeleteBuffers(1, &tex_colors_vbo);
+		glDeleteVertexArrays(1, &points_vao);
+		glDeleteBuffers(1, &points_vbo);
 	}
 	glfwTerminate();
 	return 0;

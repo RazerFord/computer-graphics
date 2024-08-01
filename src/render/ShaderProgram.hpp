@@ -20,6 +20,8 @@ public:
 
 	void use() const;
 
+	void setInt(const std::string & name, const GLint value);
+
 	bool isCompiled() const;
 
 	operator bool() const;

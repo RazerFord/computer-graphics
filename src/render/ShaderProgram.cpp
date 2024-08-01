@@ -80,6 +80,11 @@ void ShaderProgram::use() const
 	glUseProgram(_programID);
 }
 
+void ShaderProgram::setInt(const std::string & name, const GLint value)
+{
+	glUniform1i(glGetUniformLocation(_programID, name.c_str()), value);
+}
+
 void ShaderProgram::safeReset() noexcept
 {
 	if (_isCompiled)
