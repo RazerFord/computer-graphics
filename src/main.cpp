@@ -105,8 +105,9 @@ int main(int _, char ** argv)
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			program->use();
-			glBindVertexArray(points_vao);
+			glActiveTexture(GL_TEXTURE0);
 			texture->bind();
+			glBindVertexArray(points_vao);
 			glDrawArrays(GL_TRIANGLES, 0, 3);
 
 			/* Swap front and back buffers */
