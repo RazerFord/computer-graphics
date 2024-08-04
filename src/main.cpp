@@ -74,7 +74,7 @@ int main(int _, char ** argv)
 	{
 		resources::ResourceManager manager(argv[0]);
 		auto program = manager.loadShader("triangle", "shaders/vertex.vs", "shaders/fragment.fs");
-		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.png");
+		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
 
 		GLuint tex_colors_vbo, points_vbo, points_vao;
 
