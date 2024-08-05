@@ -4,9 +4,13 @@
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_double2x2.hpp>
 #include <glm/ext/matrix_double2x3.hpp>
+#include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_int2.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/trigonometric.hpp>
 #include <iostream>
-#include <glm/vec2.hpp>
+#include <vector>
 
 glm::ivec2 glfwWindowSize(640, 480);
 
@@ -26,11 +30,51 @@ void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int
 }
 
 float vertices[] = {
-	-0.5F, -0.5F, 0.0F,
+	-0.5F, -0.5F, 0.5F,
 	0.0F, 0.5F, 0.0F,
-	0.5F, -0.5F, 0.0F};
+	0.5F, -0.5F, 0.5F,
+
+	-0.5F, -0.5F, -0.5F,
+	0.0F, 0.5F, 0.0F,
+	-0.5F, -0.5F, 0.5F,
+
+	0.5F, -0.5F, -0.5F,
+	0.0F, 0.5F, 0.0F,
+	-0.5F, -0.5F, -0.5F,
+
+	0.5F, -0.5F, -0.5F,
+	0.0F, 0.5F, 0.0F,
+	0.5F, -0.5F, 0.5F,
+
+	-0.5F, -0.5F, 0.5F,
+	0.5F, -0.5F, 0.5F,
+	0.5F, -0.5F, -0.5F,
+
+	0.5F, -0.5F, -0.5F,
+	-0.5F, -0.5F, -0.5F,
+	-0.5F, -0.5F, 0.5F};
 
 float texCoord[] = {
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0,
+
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0,
+
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0,
+
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0,
+
+	0.0, 0.0,
+	0.5, 1.0,
+	1.0, 0.0,
+
 	0.0, 0.0,
 	0.5, 1.0,
 	1.0, 0.0};
@@ -103,17 +147,42 @@ int main(int _, char ** argv)
 		program->use();
 		program->setInt("tex", 0);
 
+		glEnable(GL_DEPTH_TEST);
+
 		/* Loop until the user closes the window */
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			program->use();
-			texture->bind();
-			// glActiveTexture(GL_TEXTURE0);
-			glBindVertexArray(points_vao);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+
+			int i = 0;
+			for (const auto [dx, dy]: std::vector<std::pair<float, float>>{
+					 {1.5, 0.0},
+					 {-1.5, 0.0},
+					 {0.0, 0.0},
+				 })
+			{
+				glm::mat4 model(1.0f);
+				model = glm::translate(model, glm::vec3(dx, dy, 0.0));
+				model = glm::rotate(model, glm::radians(100 * (float)sin((float)glfwGetTime())), glm::vec3(0.0f, 1.0f, 0.0f));
+
+				glm::mat4 view(1.0f);
+
+				view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.5));
+				glm::mat4 projection;
+				projection = glm::perspective(glm::radians(130.0f), static_cast<float>(glfwWindowSize.y) / glfwWindowSize.x, 0.1f, 100.0f);
+
+				program->setMat4("model", model);
+				program->setMat4("view", view);
+				program->setMat4("projection", projection);
+
+				glActiveTexture(GL_TEXTURE0);
+				texture->bind();
+				glBindVertexArray(points_vao);
+				glDrawArrays(GL_TRIANGLES, 0, 18);
+			}
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);

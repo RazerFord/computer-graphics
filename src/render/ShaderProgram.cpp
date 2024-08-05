@@ -1,4 +1,6 @@
 #include "ShaderProgram.hpp"
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 namespace render
@@ -80,9 +82,14 @@ void ShaderProgram::use() const
 	glUseProgram(_programID);
 }
 
-void ShaderProgram::setInt(const std::string & name, const GLint value)
+void ShaderProgram::setInt(const std::string & name, const GLint value) const
 {
 	glUniform1i(glGetUniformLocation(_programID, name.c_str()), value);
+}
+
+void ShaderProgram::setMat4(const std::string & name, const glm::mat4 & value) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(_programID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 void ShaderProgram::safeReset() noexcept

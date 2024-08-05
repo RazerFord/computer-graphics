@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/ext/matrix_float4x4.hpp>
 #include <string>
 
 namespace render
@@ -20,7 +21,8 @@ public:
 
 	void use() const;
 
-	void setInt(const std::string & name, const GLint value);
+	void setInt(const std::string & name, const GLint value) const;
+	void setMat4(const std::string & name, const glm::mat4 & value) const;
 
 	bool isCompiled() const;
 
