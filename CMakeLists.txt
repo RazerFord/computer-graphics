@@ -30,3 +30,5 @@ set_target_properties(BattleCity PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BIN
 add_custom_command(TARGET BattleCity POST_BUILD COMMAND ${CMAKE_COMMAND} 
     -E copy_directory ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:BattleCity>
 )
+
+include_directories(external/glm)
