@@ -2,16 +2,19 @@
 #include "render/Texture2D.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
+#include <glm/ext/matrix_double2x2.hpp>
+#include <glm/ext/matrix_double2x3.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <iostream>
+#include <glm/vec2.hpp>
 
-int glfwWindowSizeX = 640;
-int glfwWindowSizeY = 480;
+glm::ivec2 glfwWindowSize(640, 480);
 
 void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 {
-	glfwWindowSizeX = width;
-	glfwWindowSizeY = height;
-	glViewport(0, 0, glfwWindowSizeX, glfwWindowSizeY);
+	glfwWindowSize.x = width;
+	glfwWindowSize.y = height;
+	glViewport(0, 0, glfwWindowSize.x, glfwWindowSize.y);
 }
 
 void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int mode)
@@ -46,7 +49,7 @@ int main(int _, char ** argv)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow * window = glfwCreateWindow(640, 480, "Battle city", nullptr, nullptr);
+	GLFWwindow * window = glfwCreateWindow(glfwWindowSize.x, glfwWindowSize.y, "Battle city", nullptr, nullptr);
 	if (!window)
 	{
 		std::cout << "glfwCreateWindow failed" << std::endl;
