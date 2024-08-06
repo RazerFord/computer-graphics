@@ -1,7 +1,9 @@
 #include "render/ShaderProgram.hpp"
+#include "render/Sprite.hpp"
 #include "render/Texture2D.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
+#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_double2x2.hpp>
 #include <glm/ext/matrix_double2x3.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -10,7 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
-#include <vector>
 
 glm::ivec2 glfwWindowSize(640, 480);
 
@@ -120,32 +121,15 @@ int main(int _, char ** argv)
 
 	{
 		resources::ResourceManager manager(argv[0]);
-		auto program = manager.loadShader("triangle", "shaders/vertex.vs", "shaders/fragment.fs");
+		auto program = manager.loadShader("triangle", "shaders/vsprite.vs", "shaders/fsprite.fs");
 		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
+		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
 
-		GLuint tex_colors_vbo, points_vbo, points_vao;
-
-		glCreateBuffers(1, &tex_colors_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, tex_colors_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
-
-		glCreateBuffers(1, &points_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glGenVertexArrays(1, &points_vao);
-		glBindVertexArray(points_vao);
-
-		glBindBuffer(GL_ARRAY_BUFFER, tex_colors_vbo);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-		glEnableVertexAttribArray(1);
-
-		glBindBuffer(GL_ARRAY_BUFFER, points_vbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-		glEnableVertexAttribArray(0);
+		glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(glfwWindowSize.x), 0.0F, static_cast<float>(glfwWindowSize.y), -100.0F, 100.F);
 
 		program->use();
 		program->setInt("tex", 0);
+		program->setMat4("projectionMat", projection);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -157,32 +141,15 @@ int main(int _, char ** argv)
 
 			program->use();
 
-			int i = 0;
-			for (const auto [dx, dy]: std::vector<std::pair<float, float>>{
-					 {1.5, 0.0},
-					 {-1.5, 0.0},
-					 {0.0, 0.0},
-				 })
-			{
-				glm::mat4 model(1.0f);
-				model = glm::translate(model, glm::vec3(dx, dy, 0.0));
-				model = glm::rotate(model, glm::radians(100 * (float)sin((float)glfwGetTime())), glm::vec3(0.0f, 1.0f, 0.0f));
 
-				glm::mat4 view(1.0f);
-
-				view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.5));
-				glm::mat4 projection;
-				projection = glm::perspective(glm::radians(130.0f), static_cast<float>(glfwWindowSize.y) / glfwWindowSize.x, 0.1f, 100.0f);
-
-				program->setMat4("model", model);
-				program->setMat4("view", view);
-				program->setMat4("projection", projection);
-
-				glActiveTexture(GL_TEXTURE0);
-				texture->bind();
-				glBindVertexArray(points_vao);
-				glDrawArrays(GL_TRIANGLES, 0, 18);
-			}
+			sprite->setPosition(glm::vec2(100.0F, 0.0F));
+			sprite->render();
+			sprite->setPosition(glm::vec2(0.0F, 100.0F));
+			sprite->render();
+			sprite->setPosition(glm::vec2(0.0F, 0.0F));
+			sprite->render();
+			sprite->setPosition(glm::vec2(100.0F, 100.0F));
+			sprite->render();
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);
@@ -190,9 +157,6 @@ int main(int _, char ** argv)
 			/* Poll for and process events */
 			glfwPollEvents();
 		}
-		glDeleteBuffers(1, &tex_colors_vbo);
-		glDeleteVertexArrays(1, &points_vao);
-		glDeleteBuffers(1, &points_vbo);
 	}
 	glfwTerminate();
 	return 0;

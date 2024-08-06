@@ -86,8 +86,6 @@ void Sprite::render() const
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
-
-	// _spShaderProgram->setMat4("projectionMat", model);
 }
 
 void Sprite::setPosition(const glm::vec2 & position)
