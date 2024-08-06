@@ -8,6 +8,7 @@ namespace render
 {
 class ShaderProgram;
 class Texture2D;
+class Sprite;
 }// namespace render
 
 namespace resources
@@ -17,10 +18,12 @@ class ResourceManager
 private:
 	using ShaderStorage = std::unordered_map<std::string, std::shared_ptr<render::ShaderProgram>>;
 	using TextureStorage = std::unordered_map<std::string, std::shared_ptr<render::Texture2D>>;
+	using SpriteStorage = std::unordered_map<std::string, std::shared_ptr<render::Sprite>>;
 
 	const std::string _pathToExecutable;
 	ShaderStorage _shaderStorage;
 	TextureStorage _textureStorage;
+	SpriteStorage _spriteStorage;
 
 public:
 	ResourceManager(const std::string & pathToExecutable);
@@ -31,6 +34,9 @@ public:
 
 	std::shared_ptr<render::Texture2D> loadTexture(const std::string & textureName, const std::string & texturePath);
 	std::shared_ptr<render::Texture2D> getTexture(const std::string & textureName) const;
+
+	std::shared_ptr<render::Sprite> loadSprite(const std::string & spriteName, const std::string & shaderName, const std::string & textureName, const float spriteWeight, const float spriteHeight);
+	std::shared_ptr<render::Sprite> getSprite(const std::string & spriteName) const;
 
 private:
 	std::string getPath(const std::string & relativePath) const;
