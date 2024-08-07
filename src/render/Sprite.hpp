@@ -12,7 +12,7 @@ class ShaderProgram;
 
 class Sprite
 {
-public:
+protected:
 	std::shared_ptr<Texture2D> _spTexture2D;
 	std::shared_ptr<ShaderProgram> _spShaderProgram;
 	glm::vec2 _position;

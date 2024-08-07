@@ -14,6 +14,8 @@ class ShaderProgram;
 namespace details
 {
 struct State : std::pair<std::string, size_t> {
+	using std::pair<std::string, size_t>::pair;
+
 	const std::string & name() const { return first; }
 	const size_t & duration() const { return second; }
 };
@@ -21,8 +23,11 @@ struct State : std::pair<std::string, size_t> {
 
 class AnimatedSprite : public Sprite
 {
+public:
+	using States = std::vector<details::State>;
+
 private:
-	using StateStorage = std::map<std::string, std::vector<details::State>>;
+	using StateStorage = std::map<std::string, States>;
 
 	StateStorage _statesMap;
 	size_t _currentFrame = 0;

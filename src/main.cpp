@@ -1,3 +1,4 @@
+#include "render/AnimatedSprite.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Sprite.hpp"
 #include "render/Texture2D.hpp"
@@ -73,12 +74,14 @@ int main(int _, char ** argv)
 	{
 		resources::ResourceManager manager(argv[0]);
 		auto program = manager.loadShader("triangle", "shaders/vsprite.vs", "shaders/fsprite.fs");
-		std::vector<std::string> names{"first", "second"};
+		std::vector<std::string> names{"first", "second", "third", "four"};
 		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
-		auto atlas = manager.loadTextureAtlas("firsttexture", "textures/firsttexture.jpg",
-									   names, 64, 64);
-		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
-		auto sprite1 = manager.loadSprite("sprite1", "triangle", "firsttexture", 100.0F, 100.0F, "first");
+		auto atlas = manager.loadTextureAtlas("firsttexture", "textures/firsttexture.jpg", names, 64, 64);
+		auto sprite = manager.loadAnimatedSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
+
+		render::AnimatedSprite::States states{{"first", 5000}, {"second", 5000}, {"third", 5000}, {"four", 5000}};
+		sprite->insertState("example", states);
+		sprite->setState("example");
 
 		glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(glfwWindowSize.x), 0.0F, static_cast<float>(glfwWindowSize.y), -100.0F, 100.F);
 
@@ -96,15 +99,12 @@ int main(int _, char ** argv)
 
 			program->use();
 
+			sprite->setPosition(glm::vec2(100.0F, 100.0F));
+			sprite->update(1);
+			sprite->render();
 
-			sprite->setPosition(glm::vec2(100.0F, 0.0F));
-			sprite->render();
-			sprite->setPosition(glm::vec2(0.0F, 100.0F));
-			sprite->render();
-			sprite->setPosition(glm::vec2(0.0F, 0.0F));
-			sprite->render();
-			sprite1->setPosition(glm::vec2(100.0F, 100.0F));
-			sprite1->render();
+			// sprite->setPosition(glm::vec2(100.0F, 100.0F));
+			// sprite->render();
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);
