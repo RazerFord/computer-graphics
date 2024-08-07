@@ -19,6 +19,7 @@ protected:
 	glm::vec2 _size;
 	float _rotation;
 	GLuint _vao;
+	GLuint _ebo;
 	GLuint _vertexCoordsVbo;
 	GLuint _textureCoordsVbo;
 	glm::vec2 _currentLeftBottomUV;

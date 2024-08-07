@@ -22,10 +22,7 @@ void AnimatedSprite::render() const
 			st.leftBottomUV.x, st.leftBottomUV.y,
 			st.leftBottomUV.x, st.rightTopUV.y,
 			st.rightTopUV.x, st.rightTopUV.y,
-
-			st.rightTopUV.x, st.rightTopUV.y,
-			st.rightTopUV.x, st.leftBottomUV.y,
-			st.leftBottomUV.x, st.leftBottomUV.y};
+			st.rightTopUV.x, st.leftBottomUV.y};
 
 		glBindBuffer(GL_ARRAY_BUFFER, _textureCoordsVbo);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), textureCoords);

@@ -120,7 +120,7 @@ bool Game::init()
 	tankAnimatedSprite->insertState("tankLeftState", tankLeftState);
 	tankAnimatedSprite->insertState("tankDownState", tankDownState);
 	tankAnimatedSprite->insertState("tankRightState", tankRightState);
-	tankAnimatedSprite->setState("tankUp");
+	tankAnimatedSprite->setState("tankUpState");
 
 	_tank = std::make_unique<game::Tank>(tankAnimatedSprite, 0.1F, glm::vec2(200.0F, 250.0F));
 
