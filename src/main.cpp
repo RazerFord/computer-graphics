@@ -1,8 +1,5 @@
 #include "game/Game.hpp"
-#include "render/AnimatedSprite.hpp"
-#include "render/ShaderProgram.hpp"
 #include "render/Sprite.hpp"
-#include "render/Texture2D.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
@@ -15,6 +12,7 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 #include <memory>
+#include <chrono>
 
 std::shared_ptr<game::Game> gameApp;
 glm::ivec2 glfwWindowSize(640, 480);
@@ -80,13 +78,20 @@ int main(int _, char ** argv)
 
 		glEnable(GL_DEPTH_TEST);
 
+		auto lastTime = std::chrono::high_resolution_clock::now();
+
 		/* Loop until the user closes the window */
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			gameApp->update(1);
+
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
+            lastTime = currentTime;
+
+			gameApp->update(duration);
 			gameApp->render();
 
 			// sprite->setPosition(glm::vec2(100.0F, 100.0F));

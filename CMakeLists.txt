@@ -17,6 +17,8 @@ add_executable(BattleCity
     src/resources/stb_image.h
     src/game/Game.hpp
     src/game/Game.cpp
+    src/game/Tank.hpp
+    src/game/Tank.cpp
 )
 
 add_subdirectory(external/glfw)

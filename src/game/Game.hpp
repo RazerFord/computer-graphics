@@ -11,17 +11,21 @@ class ResourceManager;
 
 namespace game
 {
+class Tank;
+
 class Game
 {
 private:
 	std::shared_ptr<resources::ResourceManager> _manager;
 	glm::ivec2 _glfwWindowSize;
-    std::array<bool, 350> _keys;
+	std::array<bool, 350> _keys;
 	enum class GameState
 	{
 		Active,
 		Pause,
 	} _currentGameState;
+
+	std::unique_ptr<Tank> _tank;
 
 
 public:
