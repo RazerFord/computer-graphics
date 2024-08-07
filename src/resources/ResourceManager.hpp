@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace render
 {
@@ -35,8 +36,10 @@ public:
 	std::shared_ptr<render::Texture2D> loadTexture(const std::string & textureName, const std::string & texturePath);
 	std::shared_ptr<render::Texture2D> getTexture(const std::string & textureName) const;
 
-	std::shared_ptr<render::Sprite> loadSprite(const std::string & spriteName, const std::string & shaderName, const std::string & textureName, const float spriteWeight, const float spriteHeight);
+	std::shared_ptr<render::Sprite> loadSprite(const std::string & spriteName, const std::string & shaderName, const std::string & textureName, const float spriteWeight, const float spriteHeight, const std::string & subTextureName = "default");
 	std::shared_ptr<render::Sprite> getSprite(const std::string & spriteName) const;
+
+	std::shared_ptr<render::Texture2D> loadAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight);
 
 private:
 	std::string getPath(const std::string & relativePath) const;

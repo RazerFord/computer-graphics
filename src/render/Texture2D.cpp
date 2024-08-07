@@ -1,6 +1,10 @@
 #include "Texture2D.hpp"
-#include "ShaderProgram.hpp"
 #include <stdexcept>
+
+namespace
+{
+inline const render::Texture2D::SubTexture2D defaultSubTexture;
+}
 
 namespace render
 {
@@ -77,6 +81,31 @@ Texture2D & Texture2D::operator=(Texture2D && texture2D) noexcept
 	texture2D._textureID = 0;
 
 	return *this;
+}
+
+void Texture2D::addSubTexture(const std::string & name, const glm::vec2 & leftBottomUV, const glm::vec2 & rightTopUV)
+{
+	_subTextures.emplace(name, Texture2D::SubTexture2D(leftBottomUV, rightTopUV));
+}
+
+const Texture2D::SubTexture2D & Texture2D::getSubTexture(const std::string & name) const
+{
+	if (auto it = _subTextures.find(name); it != _subTextures.end())
+	{
+		return it->second;
+	}
+
+	return defaultSubTexture;
+}
+
+int Texture2D::width() const
+{
+	return _width;
+}
+
+int Texture2D::height() const
+{
+	return _height;
 }
 
 void Texture2D::bind() const

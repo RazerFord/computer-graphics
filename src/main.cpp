@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
+#include <vector>
 
 glm::ivec2 glfwWindowSize(640, 480);
 
@@ -29,56 +30,6 @@ void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 }
-
-float vertices[] = {
-	-0.5F, -0.5F, 0.5F,
-	0.0F, 0.5F, 0.0F,
-	0.5F, -0.5F, 0.5F,
-
-	-0.5F, -0.5F, -0.5F,
-	0.0F, 0.5F, 0.0F,
-	-0.5F, -0.5F, 0.5F,
-
-	0.5F, -0.5F, -0.5F,
-	0.0F, 0.5F, 0.0F,
-	-0.5F, -0.5F, -0.5F,
-
-	0.5F, -0.5F, -0.5F,
-	0.0F, 0.5F, 0.0F,
-	0.5F, -0.5F, 0.5F,
-
-	-0.5F, -0.5F, 0.5F,
-	0.5F, -0.5F, 0.5F,
-	0.5F, -0.5F, -0.5F,
-
-	0.5F, -0.5F, -0.5F,
-	-0.5F, -0.5F, -0.5F,
-	-0.5F, -0.5F, 0.5F};
-
-float texCoord[] = {
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0,
-
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0,
-
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0,
-
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0,
-
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0,
-
-	0.0, 0.0,
-	0.5, 1.0,
-	1.0, 0.0};
 
 int main(int _, char ** argv)
 {
@@ -122,8 +73,11 @@ int main(int _, char ** argv)
 	{
 		resources::ResourceManager manager(argv[0]);
 		auto program = manager.loadShader("triangle", "shaders/vsprite.vs", "shaders/fsprite.fs");
+		std::vector<std::string> names{"first", "second"};
 		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
-		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
+		auto atlas = manager.loadAtlas("firsttexture", "textures/firsttexture.jpg",
+									   names, 64, 64);
+		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F, "first");
 
 		glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(glfwWindowSize.x), 0.0F, static_cast<float>(glfwWindowSize.y), -100.0F, 100.F);
 

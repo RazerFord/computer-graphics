@@ -18,17 +18,9 @@ const GLfloat vertexCoords[] = {
 	1.0F, 0.0F,
 	0.0F, 0.0F};
 
-const GLfloat textureCoords[]{
-	0.0F, 0.0F,
-	0.0F, 1.0F,
-	1.0F, 1.0F,
-
-	1.0F, 1.0F,
-	1.0F, 0.0F,
-	0.0F, 0.0F};
-
 Sprite::Sprite(
 	const std::shared_ptr<Texture2D> & spTexture2D,
+	const std::string & initialSubTexture,
 	const std::shared_ptr<ShaderProgram> & spShaderProgram,
 	const glm::vec2 & position,
 	const glm::vec2 & size,
@@ -39,6 +31,17 @@ Sprite::Sprite(
 	, _size(size)
 	, _rotation(rotation)
 {
+	const render::Texture2D::SubTexture2D & st = spTexture2D->getSubTexture(initialSubTexture);
+
+	const GLfloat textureCoords[]{
+		st.leftBottomUV.x, st.leftBottomUV.y,
+		st.leftBottomUV.x, st.rightTopUV.y,
+		st.rightTopUV.x, st.rightTopUV.y,
+
+		st.rightTopUV.x, st.rightTopUV.y,
+		st.rightTopUV.x, st.leftBottomUV.y,
+		st.leftBottomUV.x, st.leftBottomUV.y};
+
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 

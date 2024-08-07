@@ -110,7 +110,8 @@ std::shared_ptr<render::Sprite> ResourceManager::loadSprite(
 	const std::string & shaderName,
 	const std::string & textureName,
 	const float spriteWeight,
-	const float spriteHeight)
+	const float spriteHeight,
+	const std::string & subTextureName)
 {
 	auto texture = getTexture(textureName);
 	if (!texture)
@@ -129,6 +130,7 @@ std::shared_ptr<render::Sprite> ResourceManager::loadSprite(
 	return _spriteStorage.emplace(spriteName,
 								  std::make_shared<render::Sprite>(
 									  texture,
+									  subTextureName,
 									  shader,
 									  glm::vec2(0.0F, 0.0F),
 									  glm::vec2(spriteWeight, spriteHeight)))
@@ -142,11 +144,43 @@ std::shared_ptr<render::Sprite> ResourceManager::getSprite(const std::string & s
 		return it->second;
 	}
 
-	std::cerr << "Can't find sprite \"" << spriteName << "\"" << std::endl;
+	std::cerr << "can't find sprite \"" << spriteName << "\"" << std::endl;
 
 	return nullptr;
 }
 
+std::shared_ptr<render::Texture2D> ResourceManager::loadAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight)
+{
+	auto spTexture = loadTexture(textureName, texturePath);
+
+	if (!spTexture)
+	{
+		std::cerr << "can't find texture \"" << textureName << "\" for atlas" << std::endl;
+		return nullptr;
+	}
+
+	const int textureWidth = spTexture->width();
+	const int textureHeight = spTexture->height();
+	int currentTextureOffsetX = 0;
+	int currentTextureOffsetY = textureHeight;
+
+	for (const auto & currentSubTextureName: subTextures)
+	{
+		glm::vec2 leftBottomUV(static_cast<float>(currentTextureOffsetX) / textureWidth, static_cast<float>(currentTextureOffsetY - subTextureHeight) / textureHeight);
+		glm::vec2 rightTopUV(static_cast<float>(currentTextureOffsetX + subTextureWidth) / textureWidth, static_cast<float>(currentTextureOffsetY) / textureHeight);
+
+		spTexture->addSubTexture(currentSubTextureName, leftBottomUV, rightTopUV);
+
+		currentTextureOffsetX += subTextureWidth;
+		if (currentTextureOffsetX >= textureWidth)
+		{
+			currentTextureOffsetX = 0;
+			currentTextureOffsetY -= subTextureHeight;
+		}
+	}
+
+	return spTexture;
+}
 
 std::string ResourceManager::getPath(const std::string & relativePath) const
 {
