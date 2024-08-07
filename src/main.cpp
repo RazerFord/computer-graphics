@@ -1,3 +1,4 @@
+#include "game/Game.hpp"
 #include "render/AnimatedSprite.hpp"
 #include "render/ShaderProgram.hpp"
 #include "render/Sprite.hpp"
@@ -13,8 +14,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
-#include <vector>
+#include <memory>
 
+std::shared_ptr<game::Game> gameApp;
 glm::ivec2 glfwWindowSize(640, 480);
 
 void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
@@ -30,6 +32,7 @@ void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int
 	{
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
+	gameApp->setKey(key, action);
 }
 
 int main(int _, char ** argv)
@@ -72,22 +75,8 @@ int main(int _, char ** argv)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	{
-		resources::ResourceManager manager(argv[0]);
-		auto program = manager.loadShader("triangle", "shaders/vsprite.vs", "shaders/fsprite.fs");
-		std::vector<std::string> names{"first", "second", "third", "four"};
-		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
-		auto atlas = manager.loadTextureAtlas("firsttexture", "textures/firsttexture.jpg", names, 64, 64);
-		auto sprite = manager.loadAnimatedSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
-
-		render::AnimatedSprite::States states{{"first", 5000}, {"second", 5000}, {"third", 5000}, {"four", 5000}};
-		sprite->insertState("example", states);
-		sprite->setState("example");
-
-		glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(glfwWindowSize.x), 0.0F, static_cast<float>(glfwWindowSize.y), -100.0F, 100.F);
-
-		program->use();
-		program->setInt("tex", 0);
-		program->setMat4("projectionMat", projection);
+		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
+		gameApp = std::make_shared<game::Game>(manager, glfwWindowSize);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -97,11 +86,8 @@ int main(int _, char ** argv)
 			/* Render here */
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			program->use();
-
-			sprite->setPosition(glm::vec2(100.0F, 100.0F));
-			sprite->update(1);
-			sprite->render();
+			gameApp->update(1);
+			gameApp->render();
 
 			// sprite->setPosition(glm::vec2(100.0F, 100.0F));
 			// sprite->render();
