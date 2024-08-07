@@ -1,5 +1,6 @@
 #include "Sprite.hpp"
 
+#include "IndexBuffer.hpp"
 #include "ShaderProgram.hpp"
 #include "Texture2D.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -43,21 +44,15 @@ Sprite::Sprite(
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 
-	glCreateBuffers(1, &_vertexCoordsVbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexCoordsVbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexCoords), vertexCoords, GL_STATIC_DRAW);
+	_vertexCoordsBuffer.init(vertexCoords, sizeof(vertexCoords));
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(0);
 
-	glCreateBuffers(1, &_textureCoordsVbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _textureCoordsVbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
+	_textureCoordsBuffer.init(textureCoords, sizeof(textureCoords));
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(1);
 
-	glGenBuffers(1, &_ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	_indexBuffer.init(indices, sizeof(indices));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -66,9 +61,6 @@ Sprite::Sprite(
 
 Sprite::~Sprite()
 {
-	glDeleteBuffers(1, &_vertexCoordsVbo);
-	glDeleteBuffers(1, &_textureCoordsVbo);
-	glDeleteBuffers(1, &_ebo);
 	glDeleteVertexArrays(1, &_vao);
 }
 
