@@ -75,9 +75,10 @@ int main(int _, char ** argv)
 		auto program = manager.loadShader("triangle", "shaders/vsprite.vs", "shaders/fsprite.fs");
 		std::vector<std::string> names{"first", "second"};
 		auto texture = manager.loadTexture("firsttexture", "textures/firsttexture.jpg");
-		auto atlas = manager.loadAtlas("firsttexture", "textures/firsttexture.jpg",
+		auto atlas = manager.loadTextureAtlas("firsttexture", "textures/firsttexture.jpg",
 									   names, 64, 64);
-		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F, "first");
+		auto sprite = manager.loadSprite("sprite", "triangle", "firsttexture", 100.0F, 100.0F);
+		auto sprite1 = manager.loadSprite("sprite1", "triangle", "firsttexture", 100.0F, 100.0F, "first");
 
 		glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(glfwWindowSize.x), 0.0F, static_cast<float>(glfwWindowSize.y), -100.0F, 100.F);
 
@@ -102,8 +103,8 @@ int main(int _, char ** argv)
 			sprite->render();
 			sprite->setPosition(glm::vec2(0.0F, 0.0F));
 			sprite->render();
-			sprite->setPosition(glm::vec2(100.0F, 100.0F));
-			sprite->render();
+			sprite1->setPosition(glm::vec2(100.0F, 100.0F));
+			sprite1->render();
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);

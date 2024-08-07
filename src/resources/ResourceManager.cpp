@@ -149,7 +149,7 @@ std::shared_ptr<render::Sprite> ResourceManager::getSprite(const std::string & s
 	return nullptr;
 }
 
-std::shared_ptr<render::Texture2D> ResourceManager::loadAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight)
+std::shared_ptr<render::Texture2D> ResourceManager::loadTextureAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight)
 {
 	auto spTexture = loadTexture(textureName, texturePath);
 

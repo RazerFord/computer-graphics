@@ -31,7 +31,7 @@ Sprite::Sprite(
 	, _size(size)
 	, _rotation(rotation)
 {
-	const render::Texture2D::SubTexture2D & st = spTexture2D->getSubTexture(initialSubTexture);
+	const render::Texture2D::SubTexture2D & st = _spTexture2D->getSubTexture(initialSubTexture);
 
 	const GLfloat textureCoords[]{
 		st.leftBottomUV.x, st.leftBottomUV.y,

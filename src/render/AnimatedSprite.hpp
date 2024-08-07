@@ -13,10 +13,7 @@ class ShaderProgram;
 
 namespace details
 {
-struct State  {
-	std::string first;
-	size_t second;
-
+struct State : std::pair<std::string, size_t> {
 	const std::string & name() const { return first; }
 	const size_t & duration() const { return second; }
 };
@@ -31,6 +28,7 @@ private:
 	size_t _currentFrame = 0;
 	size_t _currentAnimationTime = 0;
 	StateStorage::const_iterator _currentAnimationDurations = _statesMap.end();
+	mutable bool _dirty = false;
 
 public:
 	using Sprite::Sprite;

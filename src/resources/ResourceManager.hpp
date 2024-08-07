@@ -10,6 +10,7 @@ namespace render
 class ShaderProgram;
 class Texture2D;
 class Sprite;
+class AnimatedSprite;
 }// namespace render
 
 namespace resources
@@ -39,7 +40,7 @@ public:
 	std::shared_ptr<render::Sprite> loadSprite(const std::string & spriteName, const std::string & shaderName, const std::string & textureName, const float spriteWeight, const float spriteHeight, const std::string & subTextureName = "default");
 	std::shared_ptr<render::Sprite> getSprite(const std::string & spriteName) const;
 
-	std::shared_ptr<render::Texture2D> loadAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight);
+	std::shared_ptr<render::Texture2D> loadTextureAtlas(const std::string & textureName, const std::string & texturePath, const std::vector<std::string> & subTextures, const int subTextureWidth, const int subTextureHeight);
 
 private:
 	std::string getPath(const std::string & relativePath) const;
