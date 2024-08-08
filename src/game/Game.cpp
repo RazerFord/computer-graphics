@@ -29,6 +29,7 @@ void Game::render()
 {
 	_manager->getShader("triangle")->use();
 	_tank->render();
+	_manager->getAnimatedSprite("sprite")->render();
 }
 
 void Game::update(const size_t delta)

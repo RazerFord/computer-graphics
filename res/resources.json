@@ -1,0 +1,93 @@
+{
+    "shaders": [
+        {
+            "name": "triangle",
+            "filePathVertexShader": "shaders/vsprite.vs",
+            "filePathFragmentShader": "shaders/fsprite.fs"
+        }
+    ],
+    "textureAtlas": [
+        {
+            "name": "battleCity",
+            "filePathTexture": "textures/battlecity.png",
+            "width": 128,
+            "height": 128,
+            "subTextureWidth": 16,
+            "subTextureHeight": 16,
+            "subTextureNames": [
+                "tankUp1",
+                "tankUp2",
+                "tankLeft1",
+                "tankLeft2",
+                "tankDown1",
+                "tankDown2",
+                "tankRight1",
+                "tankRight2"
+            ]
+        }
+    ],
+    "animatedSprites": [
+        {
+            "name": "tankSprite",
+            "weight": 200,
+            "height": 200,
+            "shaderName": "triangle",
+            "textureName": "battleCity",
+            "initSubTextureName": "tankUp1",
+            "states": [
+                {
+                    "name": "tankUpState",
+                    "frames": [
+                        {
+                            "subTextureNames": "tankUp1",
+                            "duration": 100
+                        },
+                        {
+                            "subTextureNames": "tankUp2",
+                            "duration": 100
+                        }
+                    ]
+                },
+                {
+                    "name": "tankLeftState",
+                    "frames": [
+                        {
+                            "subTextureNames": "tankLeft1",
+                            "duration": 100
+                        },
+                        {
+                            "subTextureNames": "tankLeft2",
+                            "duration": 100
+                        }
+                    ]
+                },
+                {
+                    "name": "tankDownState",
+                    "frames": [
+                        {
+                            "subTextureNames": "tankDown1",
+                            "duration": 100
+                        },
+                        {
+                            "subTextureNames": "tankDown2",
+                            "duration": 100
+                        }
+                    ]
+                },
+                {
+                    "name": "tankRightState",
+                    "frames": [
+                        {
+                            "subTextureNames": "tankRight1",
+                            "duration": 100
+                        },
+                        {
+                            "subTextureNames": "tankRight2",
+                            "duration": 100
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
