@@ -1,7 +1,8 @@
 #include "game/Game.hpp"
-#include "render/Sprite.hpp"
+#include "render/Render.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
+#include <chrono>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_double2x2.hpp>
 #include <glm/ext/matrix_double2x3.hpp>
@@ -12,7 +13,6 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 #include <memory>
-#include <chrono>
 
 std::shared_ptr<game::Game> gameApp;
 glm::ivec2 glfwWindowSize(640, 480);
@@ -21,7 +21,7 @@ void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 {
 	glfwWindowSize.x = width;
 	glfwWindowSize.y = height;
-	glViewport(0, 0, glfwWindowSize.x, glfwWindowSize.y);
+	render::Render::setViewport(glfwWindowSize.x, glfwWindowSize.y);
 }
 
 void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int mode)
@@ -67,10 +67,10 @@ int main(int _, char ** argv)
 		return -1;
 	}
 
-	std::cout << "Renderer " << glGetString(GL_RENDERER) << std::endl;
-	std::cout << "OpenGL version " << glGetString(GL_VERSION) << std::endl;
+	std::cout << "Renderer " << render::Render::getRenderer() << std::endl;
+	std::cout << "OpenGL version " << render::Render::getVersion() << std::endl;
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	render::Render::setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	{
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
@@ -84,18 +84,14 @@ int main(int _, char ** argv)
 		while (!glfwWindowShouldClose(window))
 		{
 			/* Render here */
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			render::Render::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-            auto currentTime = std::chrono::high_resolution_clock::now();
-            double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
-            lastTime = currentTime;
+			auto currentTime = std::chrono::high_resolution_clock::now();
+			double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
+			lastTime = currentTime;
 
 			gameApp->update(duration);
 			gameApp->render();
-
-			// sprite->setPosition(glm::vec2(100.0F, 100.0F));
-			// sprite->render();
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(window);

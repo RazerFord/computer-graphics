@@ -9,6 +9,7 @@ class IndexBuffer
 {
 private:
 	GLuint _id;
+	GLuint _count;
 
 public:
 	IndexBuffer();
@@ -17,8 +18,10 @@ public:
 
 	IndexBuffer & operator=(IndexBuffer && indexBuffer) noexcept;
 
-	void init(const void * data, const size_t size);
+	void init(const void * data, const size_t count);
 	void bind() const;
 	void unbind() const;
+
+	GLuint count() const;
 };
 }// namespace render

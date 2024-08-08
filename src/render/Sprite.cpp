@@ -3,7 +3,9 @@
 #include "IndexBuffer.hpp"
 #include "ShaderProgram.hpp"
 #include "Texture2D.hpp"
+#include "VertexArray.hpp"
 #include "VertexBufferLayout.hpp"
+#include "Render.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -56,7 +58,7 @@ Sprite::Sprite(
 
 	_vertexArray.bind();
 
-	_indexBuffer.init(indices, sizeof(indices));
+	_indexBuffer.init(indices, sizeof(indices) / sizeof(GLuint));
 
 	_vertexArray.unbind();
 	_indexBuffer.unbind();
@@ -77,15 +79,12 @@ void Sprite::render() const
 	model = glm::translate(model, glm::vec3(-0.5F * _size.x, -0.5F * _size.y, 0.0F));
 	model = glm::scale(model, glm::vec3(_size, 1.0));
 
-	_vertexArray.bind();
-
 	_spShaderProgram->setMat4("modelMat", model);
 
 	glActiveTexture(GL_TEXTURE0);
 	_spTexture2D->bind();
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-	_vertexArray.unbind();
+	Render::draw(_vertexArray, _indexBuffer, *_spShaderProgram);
 }
 
 void Sprite::setPosition(const glm::vec2 & position)

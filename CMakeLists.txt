@@ -8,6 +8,8 @@ add_executable(BattleCity
     src/render/ShaderProgram.cpp
     src/render/IndexBuffer.hpp
     src/render/IndexBuffer.cpp
+    src/render/Render.hpp
+    src/render/Render.cpp
     src/render/Texture2D.hpp
     src/render/Texture2D.cpp
     src/render/Sprite.hpp
