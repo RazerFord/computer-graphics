@@ -2,6 +2,7 @@
 
 #include "IndexBuffer.hpp"
 #include "VertexBuffer.hpp"
+#include "VertexArray.hpp"
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
 #include <memory>
@@ -20,7 +21,7 @@ protected:
 	glm::vec2 _position;
 	glm::vec2 _size;
 	float _rotation;
-	GLuint _vao;
+	VertexArray _vertexArray;
 	IndexBuffer _indexBuffer;
 	VertexBuffer _vertexCoordsBuffer;
 	VertexBuffer _textureCoordsBuffer;

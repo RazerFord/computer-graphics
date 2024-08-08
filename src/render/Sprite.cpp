@@ -3,6 +3,7 @@
 #include "IndexBuffer.hpp"
 #include "ShaderProgram.hpp"
 #include "Texture2D.hpp"
+#include "VertexBufferLayout.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -41,28 +42,28 @@ Sprite::Sprite(
 		st.rightTopUV.x, st.rightTopUV.y,
 		st.rightTopUV.x, st.leftBottomUV.y};
 
-	glGenVertexArrays(1, &_vao);
-	glBindVertexArray(_vao);
+	_vertexArray.bind();
 
 	_vertexCoordsBuffer.init(vertexCoords, sizeof(vertexCoords));
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(0);
+	VertexBufferLayout vertexLayout;
+	vertexLayout.addElementLayoutFloat(2, GL_FALSE);
+	_vertexArray.addBuffer(_vertexCoordsBuffer, vertexLayout);
 
 	_textureCoordsBuffer.init(textureCoords, sizeof(textureCoords));
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(1);
+	VertexBufferLayout textureLayout;
+	textureLayout.addElementLayoutFloat(2, GL_FALSE);
+	_vertexArray.addBuffer(_textureCoordsBuffer, textureLayout);
+
+	_vertexArray.bind();
 
 	_indexBuffer.init(indices, sizeof(indices));
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	_vertexArray.unbind();
+	_indexBuffer.unbind();
 }
 
 Sprite::~Sprite()
-{
-	glDeleteVertexArrays(1, &_vao);
-}
+{}
 
 void Sprite::render() const
 {
@@ -76,7 +77,7 @@ void Sprite::render() const
 	model = glm::translate(model, glm::vec3(-0.5F * _size.x, -0.5F * _size.y, 0.0F));
 	model = glm::scale(model, glm::vec3(_size, 1.0));
 
-	glBindVertexArray(_vao);
+	_vertexArray.bind();
 
 	_spShaderProgram->setMat4("modelMat", model);
 
@@ -84,7 +85,7 @@ void Sprite::render() const
 	_spTexture2D->bind();
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-	glBindVertexArray(0);
+	_vertexArray.unbind();
 }
 
 void Sprite::setPosition(const glm::vec2 & position)

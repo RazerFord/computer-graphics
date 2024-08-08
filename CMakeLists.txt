@@ -14,8 +14,12 @@ add_executable(BattleCity
     src/render/Sprite.cpp
     src/render/AnimatedSprite.hpp
     src/render/AnimatedSprite.cpp
+    src/render/VertexArray.hpp
+    src/render/VertexArray.cpp
     src/render/VertexBuffer.hpp
     src/render/VertexBuffer.cpp
+    src/render/VertexBufferLayout.hpp
+    src/render/VertexBufferLayout.cpp
     src/resources/ResourceManager.hpp
     src/resources/ResourceManager.cpp
     src/resources/stb_image.h
