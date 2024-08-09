@@ -2,7 +2,7 @@
 #include "../render/AnimatedSprite.hpp"
 #include "../render/ShaderProgram.hpp"
 #include "../resources/ResourceManager.hpp"
-#include "Tank.hpp"
+#include "gameobjects/Tank.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -27,7 +27,7 @@ Game::~Game() {}
 
 void Game::render()
 {
-	_manager->getShader("triangle")->use();
+	_manager->getShader("spriteShader")->use();
 	_tank->render();
 }
 
@@ -70,10 +70,10 @@ bool Game::init()
 {
 	_manager->loadJSON("resources.json");
 
-	auto program = _manager->getShader("triangle");
+	auto program = _manager->getShader("spriteShader");
 	auto tankAnimatedSprite = _manager->getAnimatedSprite("tankSprite");
 
-	_tank = std::make_unique<game::Tank>(tankAnimatedSprite, 0.1F, glm::vec2(200.0F, 250.0F));
+	_tank = std::make_unique<game::Tank>(tankAnimatedSprite, 0.1F, glm::vec2(0.0F, 0.0F), glm::vec2(16.0F, 16.0F));
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);
 

@@ -1,11 +1,11 @@
 #include "Sprite.hpp"
 
 #include "IndexBuffer.hpp"
+#include "Render.hpp"
 #include "ShaderProgram.hpp"
 #include "Texture2D.hpp"
 #include "VertexArray.hpp"
 #include "VertexBufferLayout.hpp"
-#include "Render.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -26,15 +26,9 @@ const GLuint indices[] = {
 Sprite::Sprite(
 	const std::shared_ptr<Texture2D> & spTexture2D,
 	const std::string & initialSubTexture,
-	const std::shared_ptr<ShaderProgram> & spShaderProgram,
-	const glm::vec2 & position,
-	const glm::vec2 & size,
-	const float rotation)
+	const std::shared_ptr<ShaderProgram> & spShaderProgram)
 	: _spTexture2D(spTexture2D)
 	, _spShaderProgram(spShaderProgram)
-	, _position(position)
-	, _size(size)
-	, _rotation(rotation)
 {
 	const render::Texture2D::SubTexture2D & st = _spTexture2D->getSubTexture(initialSubTexture);
 
@@ -67,17 +61,17 @@ Sprite::Sprite(
 Sprite::~Sprite()
 {}
 
-void Sprite::render() const
+void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const
 {
 	_spShaderProgram->use();
 
 	glm::mat4 model(1.0F);
 
-	model = glm::translate(model, glm::vec3(_position, 0.0F));
-	model = glm::translate(model, glm::vec3(0.5F * _size.x, 0.5F * _size.y, 0.0F));
-	model = glm::rotate(model, glm::radians(_rotation), glm::vec3(0.0F, 0.0F, 1.0F));
-	model = glm::translate(model, glm::vec3(-0.5F * _size.x, -0.5F * _size.y, 0.0F));
-	model = glm::scale(model, glm::vec3(_size, 1.0));
+	model = glm::translate(model, glm::vec3(position, 0.0F));
+	model = glm::translate(model, glm::vec3(0.5F * size.x, 0.5F * size.y, 0.0F));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0F, 0.0F, 1.0F));
+	model = glm::translate(model, glm::vec3(-0.5F * size.x, -0.5F * size.y, 0.0F));
+	model = glm::scale(model, glm::vec3(size, 1.0));
 
 	_spShaderProgram->setMat4("modelMat", model);
 
@@ -85,20 +79,5 @@ void Sprite::render() const
 	_spTexture2D->bind();
 
 	Render::draw(_vertexArray, _indexBuffer, *_spShaderProgram);
-}
-
-void Sprite::setPosition(const glm::vec2 & position)
-{
-	_position = position;
-}
-
-void Sprite::setSize(const glm::vec2 & size)
-{
-	_size = size;
-}
-
-void Sprite::setRotation(const float rotation)
-{
-	_rotation = rotation;
 }
 }// namespace render

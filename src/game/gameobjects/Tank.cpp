@@ -1,22 +1,21 @@
 #include "Tank.hpp"
-#include "../render/AnimatedSprite.hpp"
+#include "../../render/AnimatedSprite.hpp"
+#include "IGameObject.hpp"
 
 namespace game
 {
-Tank::Tank(const std::shared_ptr<render::AnimatedSprite> & spAnimatedSprite, const float velocity, const glm::vec2 & position)
-	: _orientation(Orientation::Up)
+Tank::Tank(const std::shared_ptr<render::AnimatedSprite> & spAnimatedSprite, const float velocity, const glm::vec2 & position, const glm::vec2 & size)
+	: IGameObject(position, size, 0.0F)
+	, _orientation(Orientation::Up)
 	, _animatedSprite(spAnimatedSprite)
 	, _velocity(velocity)
-	, _position(position)
 	, _moveOffset(0.0F, 1.0F)
 	, _move(false)
-{
-	_animatedSprite->setPosition(_position);
-}
+{}
 
 void Tank::render() const
 {
-	_animatedSprite->render();
+	_animatedSprite->render(_position, _size, _rotation);
 }
 
 void Tank::update(const size_t delta)
@@ -24,7 +23,6 @@ void Tank::update(const size_t delta)
 	if (_move)
 	{
 		_position += delta * _velocity * _moveOffset;
-		_animatedSprite->setPosition(_position);
 		_animatedSprite->update(delta);
 	}
 }

@@ -15,7 +15,8 @@
 #include <memory>
 
 std::shared_ptr<game::Game> gameApp;
-glm::ivec2 glfwWindowSize(640, 480);
+glm::ivec2 glfwWindowSize(13 * 16, 14 * 16);
+// glm::ivec2 glfwWindowSize(640, 480);
 
 void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 {

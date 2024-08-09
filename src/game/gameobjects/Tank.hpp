@@ -3,6 +3,8 @@
 #include <glm/vec2.hpp>
 #include <memory>
 
+#include "IGameObject.hpp"
+
 namespace render
 {
 class AnimatedSprite;
@@ -18,21 +20,20 @@ enum class Orientation
 	Right,
 };
 
-class Tank
+class Tank : public IGameObject
 {
 private:
 	Orientation _orientation;
 	std::shared_ptr<render::AnimatedSprite> _animatedSprite;
 	float _velocity;
-	glm::vec2 _position;
 	glm::vec2 _moveOffset;
 	bool _move;
 
 public:
-	Tank(const std::shared_ptr<render::AnimatedSprite> & spAnimatedSprite, const float velocity, const glm::vec2 & position);
+	Tank(const std::shared_ptr<render::AnimatedSprite> & spAnimatedSprite, const float velocity, const glm::vec2 & position, const glm::vec2 & size);
 
-	void render() const;
-	void update(const size_t delta);
+	void render() const override;
+	void update(const size_t delta) override;
 	void setOrientation(const Orientation orientation);
 	void setMove(const bool move);
 };

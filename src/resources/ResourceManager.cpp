@@ -114,8 +114,6 @@ std::shared_ptr<render::Sprite> ResourceManager::loadSprite(
 	const std::string & spriteName,
 	const std::string & shaderName,
 	const std::string & textureName,
-	const float spriteWeight,
-	const float spriteHeight,
 	const std::string & subTextureName)
 {
 	auto texture = getTexture(textureName);
@@ -136,9 +134,7 @@ std::shared_ptr<render::Sprite> ResourceManager::loadSprite(
 								  std::make_shared<render::Sprite>(
 									  texture,
 									  subTextureName,
-									  shader,
-									  glm::vec2(0.0F, 0.0F),
-									  glm::vec2(spriteWeight, spriteHeight)))
+									  shader))
 		.first->second;
 }
 
@@ -192,8 +188,6 @@ std::shared_ptr<render::AnimatedSprite> ResourceManager::loadAnimatedSprite(
 	const std::string & spriteName,
 	const std::string & shaderName,
 	const std::string & textureName,
-	const float spriteWeight,
-	const float spriteHeight,
 	const std::string & subTextureName)
 {
 	auto texture = getTexture(textureName);
@@ -214,9 +208,7 @@ std::shared_ptr<render::AnimatedSprite> ResourceManager::loadAnimatedSprite(
 										  std::make_shared<render::AnimatedSprite>(
 											  texture,
 											  subTextureName,
-											  shader,
-											  glm::vec2(0.0F, 0.0F),
-											  glm::vec2(spriteWeight, spriteHeight)))
+											  shader))
 		.first->second;
 }
 
@@ -270,17 +262,17 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 		}
 	}
 
-	auto textureAtlasIterator = document.FindMember("textureAtlas");
+	auto textureAtlasIterator = document.FindMember("textureAtlases");
 	if (textureAtlasIterator != document.MemberEnd())
 	{
 		for (const auto & currentTextureAtlas: textureAtlasIterator->value.GetArray())
 		{
 			const std::string name = currentTextureAtlas["name"].GetString();
-			const std::string filePathTexture = currentTextureAtlas["filePathTexture"].GetString();
+			const std::string filePathTexture = currentTextureAtlas["filePath"].GetString();
 			const int subTextureWidth = currentTextureAtlas["subTextureWidth"].GetInt();
 			const int subTextureHeight = currentTextureAtlas["subTextureHeight"].GetInt();
 
-			const auto subTextureNamesArray = currentTextureAtlas["subTextureNames"].GetArray();
+			const auto subTextureNamesArray = currentTextureAtlas["subTextures"].GetArray();
 			std::vector<std::string> subTextureNames;
 			for (const auto & subTextureName: subTextureNamesArray)
 			{
@@ -296,19 +288,36 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 		}
 	}
 
+	auto spritesIterator = document.FindMember("sprites");
+	if (spritesIterator != document.MemberEnd())
+	{
+		for (const auto & currentSprite: spritesIterator->value.GetArray())
+		{
+			const std::string name = currentSprite["name"].GetString();
+			const std::string shader = currentSprite["shader"].GetString();
+			const std::string textureAtlas = currentSprite["textureAtlas"].GetString();
+			const std::string initSubTextureName = currentSprite["initialSubTexture"].GetString();
+
+			auto sprite = loadSprite(name, shader, textureAtlas, initSubTextureName);
+			if (!sprite)
+			{
+				std::cerr << "can't create sprite \"" << "tankSprite" << "\"" << std::endl;
+				return false;
+			}
+		}
+	}
+
 	auto animatedSpritesIterator = document.FindMember("animatedSprites");
 	if (animatedSpritesIterator != document.MemberEnd())
 	{
 		for (const auto & currentAnimatedSprite: animatedSpritesIterator->value.GetArray())
 		{
 			const std::string name = currentAnimatedSprite["name"].GetString();
-			const int weight = currentAnimatedSprite["weight"].GetInt();
-			const int height = currentAnimatedSprite["height"].GetInt();
 			const std::string shaderName = currentAnimatedSprite["shaderName"].GetString();
 			const std::string textureName = currentAnimatedSprite["textureName"].GetString();
 			const std::string initSubTextureName = currentAnimatedSprite["initSubTextureName"].GetString();
 
-			auto animatedSprite = loadAnimatedSprite(name, shaderName, textureName, weight, height, initSubTextureName);
+			auto animatedSprite = loadAnimatedSprite(name, shaderName, textureName, initSubTextureName);
 			if (!animatedSprite)
 			{
 				std::cerr << "can't create sprite \"" << "tankSprite" << "\"" << std::endl;
@@ -332,8 +341,37 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 		}
 	}
 
+	auto levelsIterator = document.FindMember("levels");
+	if (levelsIterator != document.MemberEnd())
+	{
+		for (const auto & currentLevel: levelsIterator->value.GetArray())
+		{
+			const auto description = currentLevel["description"].GetArray();
+			std::vector<std::string> levelRows;
+			size_t maxLen = 0;
+			for (const auto & row: description)
+			{
+				levelRows.push_back(row.GetString());
+				maxLen = std::max(levelRows.back().size(), maxLen);
+			}
+
+			for (auto & row: levelRows)
+			{
+				row.resize(maxLen, 'D');
+			}
+
+			_levels.emplace_back(std::move(levelRows));
+		}
+	}
+
 	return true;
 }
+
+const ResourceManager::LevelStorage & ResourceManager::levels() const
+{
+	return _levels;
+}
+
 
 std::string ResourceManager::getPath(const std::string & relativePath) const
 {

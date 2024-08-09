@@ -11,7 +11,7 @@ void AnimatedSprite::insertState(const std::string & state, const std::vector<de
 	_statesMap[state] = subTextureDuration;
 }
 
-void AnimatedSprite::render() const
+void AnimatedSprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const
 {
 	if (_dirty)
 	{
@@ -28,7 +28,7 @@ void AnimatedSprite::render() const
 		_dirty = false;
 	}
 
-	Sprite::render();
+	Sprite::render(position, size, rotation);
 }
 
 void AnimatedSprite::setState(const std::string & state)

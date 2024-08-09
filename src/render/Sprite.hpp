@@ -1,8 +1,8 @@
 #pragma once
 
 #include "IndexBuffer.hpp"
-#include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
+#include "VertexBuffer.hpp"
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
 #include <memory>
@@ -18,9 +18,6 @@ class Sprite
 protected:
 	std::shared_ptr<Texture2D> _spTexture2D;
 	std::shared_ptr<ShaderProgram> _spShaderProgram;
-	glm::vec2 _position;
-	glm::vec2 _size;
-	float _rotation;
 	VertexArray _vertexArray;
 	IndexBuffer _indexBuffer;
 	VertexBuffer _vertexCoordsBuffer;
@@ -32,16 +29,9 @@ public:
 	Sprite(
 		const std::shared_ptr<Texture2D> & spTexture2D,
 		const std::string & initialSubTexture,
-		const std::shared_ptr<ShaderProgram> & spShaderProgram,
-		const glm::vec2 & position = glm::vec2(0.0F),
-		const glm::vec2 & size = glm::vec2(1.0F),
-		const float rotation = 0.0F);
+		const std::shared_ptr<ShaderProgram> & spShaderProgram);
 
-	virtual void render() const;
-
-	void setPosition(const glm::vec2 & position);
-	void setSize(const glm::vec2 & size);
-	void setRotation(const float rotation);
+	virtual void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const;
 
 	virtual ~Sprite();
 };

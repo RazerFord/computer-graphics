@@ -40,7 +40,7 @@ public:
 
 	void insertState(const std::string & state, const std::vector<details::State> & subTextureDuration);
 
-	void render() const override;
+	void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const override;
 
 	void setState(const std::string & state);
 
