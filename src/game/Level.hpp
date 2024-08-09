@@ -21,7 +21,7 @@ private:
 	std::vector<std::shared_ptr<IGameObject>> _gameObjects;
 
 public:
-	Level(const std::vector<std::string> & description, resources::ResourceManager * manager);
+	Level(const std::vector<std::string> & description, const resources::ResourceManager & manager);
 	void render() const;
 	void update(const size_t delta);
 };

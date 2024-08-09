@@ -12,6 +12,7 @@ class ResourceManager;
 namespace game
 {
 class Tank;
+class Level;
 
 class Game
 {
@@ -26,7 +27,7 @@ private:
 	} _currentGameState;
 
 	std::unique_ptr<Tank> _tank;
-
+	std::unique_ptr<Level> _level;
 
 public:
 	Game(const std::shared_ptr<resources::ResourceManager> & manager, const glm::ivec2 glfwWindowSize);

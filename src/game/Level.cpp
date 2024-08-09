@@ -1,13 +1,60 @@
 #include "Level.hpp"
 #include "../resources/ResourceManager.hpp"
+#include "gameobjects/BrickWall.hpp"
 #include "gameobjects/IGameObject.hpp"
 #include <iostream>
+#include <memory>
 
 namespace game
 {
 const int BLOCK_SIZE = 16;
 
-Level::Level(const std::vector<std::string> & description, resources::ResourceManager * manager)
+std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::ResourceManager & manager,
+														  const char descriptor,
+														  const glm::vec2 & position,
+														  const glm::vec2 & size,
+														  const float rotation)
+{
+	switch (descriptor)
+	{
+		case '0': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Right"), position, size, rotation);
+		}
+		case '1': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Bottom"), position, size, rotation);
+		}
+		case '2': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Left"), position, size, rotation);
+		}
+		case '3': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Top"), position, size, rotation);
+		}
+		case '4': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_All"), position, size, rotation);
+		}
+		case 'G': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_BottomLeft"), position, size, rotation);
+		}
+		case 'H': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_BottomRight"), position, size, rotation);
+		}
+		case 'I': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_TopLeft"), position, size, rotation);
+		}
+		case 'J': {
+			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_TopRight"), position, size, rotation);
+		}
+		case 'D': {
+			return nullptr;
+		}
+		default: {
+			std::cerr << "unknown game object descriptor \"" << descriptor << "\"" << std::endl;
+			return nullptr;
+		}
+	}
+}
+
+Level::Level(const std::vector<std::string> & description, const resources::ResourceManager & manager)
 {
 	if (description.empty())
 	{
@@ -25,12 +72,7 @@ Level::Level(const std::vector<std::string> & description, resources::ResourceMa
 		int currentLeftOffset = 0;
 		for (const char currentElement: currentRow)
 		{
-			switch (currentElement)
-			{
-				case '1': {
-					break;
-				}
-			}
+			_gameObjects.emplace_back(makeGameObjectFromDescriptor(manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
 			currentLeftOffset += BLOCK_SIZE;
 		}
 		currentBottomOffset -= BLOCK_SIZE;

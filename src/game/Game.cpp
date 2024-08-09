@@ -1,15 +1,13 @@
 #include "Game.hpp"
-#include "../render/AnimatedSprite.hpp"
 #include "../render/ShaderProgram.hpp"
 #include "../resources/ResourceManager.hpp"
+#include "Level.hpp"
 #include "gameobjects/Tank.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/glm.hpp>
-#include <iostream>
 #include <memory>
-#include <vector>
 
 namespace game
 {
@@ -29,10 +27,13 @@ void Game::render()
 {
 	_manager->getShader("spriteShader")->use();
 	_tank->render();
+	_level->render();
 }
 
 void Game::update(const size_t delta)
 {
+	_level->update(delta);
+
 	if (_keys[GLFW_KEY_W])
 	{
 		_tank->setOrientation(Orientation::Up);
@@ -74,6 +75,7 @@ bool Game::init()
 	auto tankAnimatedSprite = _manager->getAnimatedSprite("tankSprite");
 
 	_tank = std::make_unique<game::Tank>(tankAnimatedSprite, 0.1F, glm::vec2(0.0F, 0.0F), glm::vec2(16.0F, 16.0F));
+	_level = std::make_unique<game::Level>(_manager->levels().front(), *_manager);
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);
 
