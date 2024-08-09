@@ -47,6 +47,8 @@ public:
 	std::shared_ptr<render::AnimatedSprite> loadAnimatedSprite(const std::string & spriteName, const std::string & shaderName, const std::string & textureName, const float spriteWeight, const float spriteHeight, const std::string & subTextureName = "default");
 	std::shared_ptr<render::AnimatedSprite> getAnimatedSprite(const std::string & spriteName) const;
 
+	bool loadJSON(const std::string & JSONPath);
+
 private:
 	std::string getPath(const std::string & relativePath) const;
 	std::string readFile(const std::string & relativePathToFile) const;

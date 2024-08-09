@@ -10,8 +10,6 @@
         {
             "name": "battleCity",
             "filePathTexture": "textures/battlecity.png",
-            "width": 128,
-            "height": 128,
             "subTextureWidth": 16,
             "subTextureHeight": 16,
             "subTextureNames": [
@@ -39,11 +37,11 @@
                     "name": "tankUpState",
                     "frames": [
                         {
-                            "subTextureNames": "tankUp1",
+                            "subTextureName": "tankUp1",
                             "duration": 100
                         },
                         {
-                            "subTextureNames": "tankUp2",
+                            "subTextureName": "tankUp2",
                             "duration": 100
                         }
                     ]
@@ -52,11 +50,11 @@
                     "name": "tankLeftState",
                     "frames": [
                         {
-                            "subTextureNames": "tankLeft1",
+                            "subTextureName": "tankLeft1",
                             "duration": 100
                         },
                         {
-                            "subTextureNames": "tankLeft2",
+                            "subTextureName": "tankLeft2",
                             "duration": 100
                         }
                     ]
@@ -65,11 +63,11 @@
                     "name": "tankDownState",
                     "frames": [
                         {
-                            "subTextureNames": "tankDown1",
+                            "subTextureName": "tankDown1",
                             "duration": 100
                         },
                         {
-                            "subTextureNames": "tankDown2",
+                            "subTextureName": "tankDown2",
                             "duration": 100
                         }
                     ]
@@ -78,11 +76,11 @@
                     "name": "tankRightState",
                     "frames": [
                         {
-                            "subTextureNames": "tankRight1",
+                            "subTextureName": "tankRight1",
                             "duration": 100
                         },
                         {
-                            "subTextureNames": "tankRight2",
+                            "subTextureName": "tankRight2",
                             "duration": 100
                         }
                     ]
