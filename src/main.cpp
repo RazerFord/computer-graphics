@@ -99,6 +99,8 @@ int main(int _, char ** argv)
 			/* Poll for and process events */
 			glfwPollEvents();
 		}
+
+		gameApp = nullptr;
 	}
 	glfwTerminate();
 	return 0;
