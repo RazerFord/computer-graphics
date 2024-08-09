@@ -50,3 +50,4 @@ add_custom_command(TARGET BattleCity POST_BUILD COMMAND ${CMAKE_COMMAND}
 )
 
 include_directories(external/glm)
+include_directories(external/rapidjson/include)
