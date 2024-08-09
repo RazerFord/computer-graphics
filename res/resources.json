@@ -9,7 +9,7 @@
     "textureAtlas": [
         {
             "name": "battleCity",
-            "filePathTexture": "textures/battlecity.png",
+            "filePathTexture": "textures/tanks.png",
             "subTextureWidth": 16,
             "subTextureHeight": 16,
             "subTextureNames": [
