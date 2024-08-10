@@ -22,7 +22,25 @@ void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 {
 	glfwWindowSize.x = width;
 	glfwWindowSize.y = height;
-	render::Render::setViewport(glfwWindowSize.x, glfwWindowSize.y);
+
+	const float aspectRation = 13.0F / 14.0F;
+	int viewportWidth = width;
+	int viewportHeight = height;
+	int leftOffset = 0;
+	int bottomOffset = 0;
+
+	if (static_cast<float>(glfwWindowSize.x) / glfwWindowSize.y > aspectRation)
+	{
+		viewportWidth = glfwWindowSize.y * aspectRation;
+		leftOffset = (glfwWindowSize.x - viewportWidth) / 2;
+	}
+	else if (static_cast<float>(glfwWindowSize.x) / glfwWindowSize.y < aspectRation)
+	{
+		viewportHeight = glfwWindowSize.x / aspectRation;
+		bottomOffset = (glfwWindowSize.y - viewportHeight) / 2;
+	}
+
+	render::Render::setViewport(viewportWidth, viewportHeight, leftOffset, bottomOffset);
 }
 
 void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int mode)

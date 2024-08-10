@@ -27,6 +27,8 @@ const char pathSeparator =
 #endif
 }// namespace
 
+const float offsetForTexture = 0.001F;
+
 namespace resources
 {
 ResourceManager::ResourceManager(const std::string & pathToExecutable)
@@ -167,8 +169,8 @@ std::shared_ptr<render::Texture2D> ResourceManager::loadTextureAtlas(const std::
 
 	for (const auto & currentSubTextureName: subTextures)
 	{
-		glm::vec2 leftBottomUV(static_cast<float>(currentTextureOffsetX) / textureWidth, static_cast<float>(currentTextureOffsetY - subTextureHeight) / textureHeight);
-		glm::vec2 rightTopUV(static_cast<float>(currentTextureOffsetX + subTextureWidth) / textureWidth, static_cast<float>(currentTextureOffsetY) / textureHeight);
+		glm::vec2 leftBottomUV(static_cast<float>(currentTextureOffsetX + offsetForTexture) / textureWidth, static_cast<float>(currentTextureOffsetY - subTextureHeight + offsetForTexture) / textureHeight);
+		glm::vec2 rightTopUV(static_cast<float>(currentTextureOffsetX + subTextureWidth - offsetForTexture) / textureWidth, static_cast<float>(currentTextureOffsetY - offsetForTexture) / textureHeight);
 
 		spTexture->addSubTexture(currentSubTextureName, leftBottomUV, rightTopUV);
 
