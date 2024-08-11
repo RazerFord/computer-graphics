@@ -35,15 +35,15 @@ void Tank::render() const
 			break;
 		}
 		case game::Orientation::Down: {
-			_spriteUp->render(_position, _size, _rotation, _spriteAnimatorDown.getCurrentFrame());
+			_spriteDown->render(_position, _size, _rotation, _spriteAnimatorDown.getCurrentFrame());
 			break;
 		}
 		case game::Orientation::Left: {
-			_spriteUp->render(_position, _size, _rotation, _spriteAnimatorLeft.getCurrentFrame());
+			_spriteLeft->render(_position, _size, _rotation, _spriteAnimatorLeft.getCurrentFrame());
 			break;
 		}
 		case game::Orientation::Right: {
-			_spriteUp->render(_position, _size, _rotation, _spriteAnimatorRight.getCurrentFrame());
+			_spriteRight->render(_position, _size, _rotation, _spriteAnimatorRight.getCurrentFrame());
 			break;
 		}
 	}
