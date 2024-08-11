@@ -64,6 +64,7 @@ public:
 private:
 	std::array<std::shared_ptr<render::Sprite>, 15> _sprites;
 	std::array<BrickState, 4> _states;
+	const std::array<glm::vec2, 4> _offsets;
 
 public:
 	BrickWall(const BrickWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation);

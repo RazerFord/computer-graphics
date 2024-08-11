@@ -13,6 +13,12 @@ BrickWall::BrickWall(const BrickWallType & type, const resources::ResourceManage
 		  BrickWall::BrickState::Destroyed,
 		  BrickWall::BrickState::Destroyed,
 	  }
+	, _offsets{
+		  glm::vec2(0.0F, _size.y / 2.0F),
+		  glm::vec2(_size.x / 2.0F, _size.y / 2.0F),
+		  glm::vec2(0.0F, 0.0F),
+		  glm::vec2(_size.x / 2.0F, 0.0F),
+	  }
 {
 	_sprites[static_cast<size_t>(BrickState::All)] = manager.getSprite("brickWall_All");
 	_sprites[static_cast<size_t>(BrickState::TopLeft)] = manager.getSprite("brickWall_TopLeft");
@@ -102,14 +108,7 @@ void BrickWall::renderBrick(const BrickLocation & location) const
 	const auto state = _states[index];
 	if (state != BrickState::Destroyed)
 	{
-		const std::array<glm::vec2, 4> offsets{
-			glm::vec2(0.0F, _size.y / 2.0F),
-			glm::vec2(_size.x / 2.0F, _size.y / 2.0F),
-			glm::vec2(0.0F, 0.0F),
-			glm::vec2(_size.x / 2.0F, 0.0F),
-		};
-
-		_sprites[static_cast<size_t>(state)]->render(_position + offsets[index], _size / 2.0F, _rotation);
+		_sprites[static_cast<size_t>(state)]->render(_position + _offsets[index], _size / 2.0F, _rotation);
 	}
 }
 

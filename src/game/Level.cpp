@@ -1,6 +1,7 @@
 #include "Level.hpp"
 #include "../resources/ResourceManager.hpp"
 #include "gameobjects/BrickWall.hpp"
+#include "gameobjects/ConcreteWall.hpp"
 #include "gameobjects/IGameObject.hpp"
 #include <iostream>
 #include <memory>
@@ -31,6 +32,21 @@ std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::Resou
 		}
 		case '4': {
 			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::All, manager, position, size, rotation);
+		}
+		case '5': {
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Right, manager, position, size, rotation);
+		}
+		case '6': {
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Bottom, manager, position, size, rotation);
+		}
+		case '7': {
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Left, manager, position, size, rotation);
+		}
+		case '8': {
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Top, manager, position, size, rotation);
+		}
+		case '9': {
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::All, manager, position, size, rotation);
 		}
 		case 'G': {
 			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomLeft, manager, position, size, rotation);
