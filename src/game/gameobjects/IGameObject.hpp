@@ -14,7 +14,7 @@ public:
 	IGameObject(const glm::vec2 & position, const glm::vec2 & size, const float rotation);
 
 	virtual void render() const = 0;
-	virtual void update(const size_t delta) = 0;
+	virtual void update(const size_t delta);
 	virtual ~IGameObject() = default;
 };
 }// namespace game

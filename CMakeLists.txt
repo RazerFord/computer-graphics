@@ -31,12 +31,20 @@ add_executable(BattleCity
     src/game/Level.cpp
     src/game/gameobjects/ConcreteWall.hpp
     src/game/gameobjects/ConcreteWall.cpp
+    src/game/gameobjects/Eagle.hpp
+    src/game/gameobjects/Eagle.cpp
+    src/game/gameobjects/Ice.hpp
+    src/game/gameobjects/Ice.cpp
     src/game/gameobjects/BrickWall.hpp
     src/game/gameobjects/BrickWall.cpp
     src/game/gameobjects/IGameObject.hpp
     src/game/gameobjects/IGameObject.cpp
     src/game/gameobjects/Tank.hpp
     src/game/gameobjects/Tank.cpp
+    src/game/gameobjects/Trees.hpp
+    src/game/gameobjects/Trees.cpp
+    src/game/gameobjects/Water.hpp
+    src/game/gameobjects/Water.cpp
 )
 
 add_subdirectory(external/glfw)

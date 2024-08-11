@@ -7,4 +7,7 @@ IGameObject::IGameObject(const glm::vec2 & position, const glm::vec2 & size, con
 	, _size(size)
 	, _rotation(rotation)
 {}
+
+void IGameObject::update(const size_t delta)
+{}
 }// namespace game

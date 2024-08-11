@@ -85,7 +85,7 @@ void ConcreteWall::render() const
 
 void ConcreteWall::update(const size_t delta)
 {
-	// BrickWall static object
+	// ConcreteWall static object
 }
 
 void ConcreteWall::renderBlock(const BlockLocation & location) const

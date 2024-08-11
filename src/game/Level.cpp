@@ -2,7 +2,11 @@
 #include "../resources/ResourceManager.hpp"
 #include "gameobjects/BrickWall.hpp"
 #include "gameobjects/ConcreteWall.hpp"
+#include "gameobjects/Eagle.hpp"
 #include "gameobjects/IGameObject.hpp"
+#include "gameobjects/Ice.hpp"
+#include "gameobjects/Trees.hpp"
+#include "gameobjects/Water.hpp"
 #include <iostream>
 #include <memory>
 
@@ -47,6 +51,18 @@ std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::Resou
 		}
 		case '9': {
 			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::All, manager, position, size, rotation);
+		}
+		case 'A': {
+			return std::make_shared<game::Water>(manager, position, size, rotation);
+		}
+		case 'B': {
+			return std::make_shared<game::Trees>(manager, position, size, rotation);
+		}
+		case 'C': {
+			return std::make_shared<game::Ice>(manager, position, size, rotation);
+		}
+		case 'E': {
+			return std::make_shared<game::Eagle>(manager, position, size, rotation);
 		}
 		case 'G': {
 			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomLeft, manager, position, size, rotation);

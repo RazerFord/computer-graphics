@@ -82,7 +82,7 @@ bool Game::init()
 		glm::vec2(0.0F, 0.0F),
 		glm::vec2(16.0F, 16.0F));
 
-	_level = std::make_unique<game::Level>(_manager->levels().front(), *_manager);
+	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);
 
