@@ -23,58 +23,58 @@ std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::Resou
 	switch (descriptor)
 	{
 		case '0': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Right, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Right, manager, position, size, rotation, 0.0F);
 		}
 		case '1': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Bottom, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Bottom, manager, position, size, rotation, 0.0F);
 		}
 		case '2': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Left, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Left, manager, position, size, rotation, 0.0F);
 		}
 		case '3': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Top, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Top, manager, position, size, rotation, 0.0F);
 		}
 		case '4': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::All, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::All, manager, position, size, rotation, 0.0F);
 		}
 		case '5': {
-			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Right, manager, position, size, rotation);
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Right, manager, position, size, rotation, 0.0F);
 		}
 		case '6': {
-			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Bottom, manager, position, size, rotation);
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Bottom, manager, position, size, rotation, 0.0F);
 		}
 		case '7': {
-			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Left, manager, position, size, rotation);
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Left, manager, position, size, rotation, 0.0F);
 		}
 		case '8': {
-			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Top, manager, position, size, rotation);
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::Top, manager, position, size, rotation, 0.0F);
 		}
 		case '9': {
-			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::All, manager, position, size, rotation);
+			return std::make_shared<game::ConcreteWall>(ConcreteWall::ConcreteWallType::All, manager, position, size, rotation, 0.0F);
 		}
 		case 'A': {
-			return std::make_shared<game::Water>(manager, position, size, rotation);
+			return std::make_shared<game::Water>(manager, position, size, rotation, 0.0F);
 		}
 		case 'B': {
-			return std::make_shared<game::Trees>(manager, position, size, rotation);
+			return std::make_shared<game::Trees>(manager, position, size, rotation, 1.0F);
 		}
 		case 'C': {
-			return std::make_shared<game::Ice>(manager, position, size, rotation);
+			return std::make_shared<game::Ice>(manager, position, size, rotation, -1.0F);
 		}
 		case 'E': {
-			return std::make_shared<game::Eagle>(manager, position, size, rotation);
+			return std::make_shared<game::Eagle>(manager, position, size, rotation, 0.0F);
 		}
 		case 'G': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomLeft, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomLeft, manager, position, size, rotation, 0.0F);
 		}
 		case 'H': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomRight, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomRight, manager, position, size, rotation, 0.0F);
 		}
 		case 'I': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopLeft, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopLeft, manager, position, size, rotation, 0.0F);
 		}
 		case 'J': {
-			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopRight, manager, position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopRight, manager, position, size, rotation, 0.0F);
 		}
 		case 'D': {
 			return nullptr;

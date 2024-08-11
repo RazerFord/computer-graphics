@@ -33,7 +33,7 @@ private:
 	const std::array<glm::vec2, 4> _offsets;
 
 public:
-	Trees(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation);
+	Trees(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
 
 	virtual void render() const override;
 

@@ -10,8 +10,9 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		   const std::shared_ptr<render::Sprite> & spriteLeft,
 		   const float velocity,
 		   const glm::vec2 & position,
-		   const glm::vec2 & size)
-	: IGameObject(position, size, 0.0F)
+		   const glm::vec2 & size,
+		   const float layer)
+	: IGameObject(position, size, 0.0F, layer)
 	, _orientation(Orientation::Up)
 	, _spriteUp(spriteUp)
 	, _spriteRight(spriteRight)
@@ -31,19 +32,19 @@ void Tank::render() const
 	switch (_orientation)
 	{
 		case game::Orientation::Up: {
-			_spriteUp->render(_position, _size, _rotation, _spriteAnimatorUp.getCurrentFrame());
+			_spriteUp->render(_position, _size, _rotation, _layer, _spriteAnimatorUp.getCurrentFrame());
 			break;
 		}
 		case game::Orientation::Down: {
-			_spriteDown->render(_position, _size, _rotation, _spriteAnimatorDown.getCurrentFrame());
+			_spriteDown->render(_position, _size, _rotation, _layer, _spriteAnimatorDown.getCurrentFrame());
 			break;
 		}
 		case game::Orientation::Left: {
-			_spriteLeft->render(_position, _size, _rotation, _spriteAnimatorLeft.getCurrentFrame());
+			_spriteLeft->render(_position, _size, _rotation, _layer, _spriteAnimatorLeft.getCurrentFrame());
 			break;
 		}
 		case game::Orientation::Right: {
-			_spriteRight->render(_position, _size, _rotation, _spriteAnimatorRight.getCurrentFrame());
+			_spriteRight->render(_position, _size, _rotation, _layer, _spriteAnimatorRight.getCurrentFrame());
 			break;
 		}
 	}

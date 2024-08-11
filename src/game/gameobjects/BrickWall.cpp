@@ -5,8 +5,8 @@
 
 namespace game
 {
-BrickWall::BrickWall(const BrickWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation)
-	: IGameObject(position, size, rotation)
+BrickWall::BrickWall(const BrickWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
+	: IGameObject(position, size, rotation, layer)
 	, _states{
 		  BrickWall::BrickState::Destroyed,
 		  BrickWall::BrickState::Destroyed,
@@ -108,7 +108,7 @@ void BrickWall::renderBrick(const BrickLocation & location) const
 	const auto state = _states[index];
 	if (state != BrickState::Destroyed)
 	{
-		_sprites[static_cast<size_t>(state)]->render(_position + _offsets[index], _size / 2.0F, _rotation);
+		_sprites[static_cast<size_t>(state)]->render(_position + _offsets[index], _size / 2.0F, _rotation, _layer);
 	}
 }
 

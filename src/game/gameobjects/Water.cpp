@@ -5,8 +5,8 @@
 
 namespace game
 {
-Water::Water(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation)
-	: IGameObject(position, size, rotation)
+Water::Water(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
+	: IGameObject(position, size, rotation, layer)
 	, _sprite{manager.getSprite("water")}
 	, _spriteAnimator{_sprite}
 	, _offsets{
@@ -38,6 +38,6 @@ void Water::update(const size_t delta)
 
 void Water::renderBrick(const WaterLocation & location) const
 {
-	_sprite->render(_position + _offsets[static_cast<size_t>(location)], _size / 2.0F, _rotation, _spriteAnimator.getCurrentFrame());
+	_sprite->render(_position + _offsets[static_cast<size_t>(location)], _size / 2.0F, _rotation, _layer, _spriteAnimator.getCurrentFrame());
 }
 }// namespace game

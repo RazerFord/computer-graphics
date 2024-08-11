@@ -1,4 +1,5 @@
 #include "Render.hpp"
+#include "IndexBuffer.hpp"
 #include <GL/gl.h>
 
 namespace render
@@ -18,6 +19,11 @@ void Render::enable(const GLenum cap)
 	glEnable(cap);
 }
 
+void Render::disable(const GLenum cap)
+{
+	glDisable(cap);
+}
+
 void Render::setClearColor(const float r, const float g, const float b, const float a)
 {
 	glClearColor(r, g, b, a);
@@ -32,7 +38,6 @@ void Render::setViewport(const GLuint width, const GLuint height, const GLuint l
 {
 	glViewport(leftOffset, bottomOffset, width, height);
 }
-
 
 std::string Render::getRenderer()
 {

@@ -9,9 +9,10 @@ protected:
 	glm::vec2 _position;
 	glm::vec2 _size;
 	float _rotation;
+	float _layer;
 
 public:
-	IGameObject(const glm::vec2 & position, const glm::vec2 & size, const float rotation);
+	IGameObject(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
 
 	virtual void render() const = 0;
 	virtual void update(const size_t delta);

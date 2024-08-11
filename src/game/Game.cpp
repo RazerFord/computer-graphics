@@ -26,8 +26,8 @@ Game::~Game() {}
 void Game::render()
 {
 	_manager->getShader("spriteShader")->use();
-	_level->render();
 	_tank->render();
+	_level->render();
 }
 
 void Game::update(const size_t delta)
@@ -80,7 +80,8 @@ bool Game::init()
 		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
 		0.1F,
 		glm::vec2(0.0F, 0.0F),
-		glm::vec2(16.0F, 16.0F));
+		glm::vec2(16.0F, 16.0F),
+		0.0F);
 
 	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
 

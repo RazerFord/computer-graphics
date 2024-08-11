@@ -90,12 +90,11 @@ int main(int _, char ** argv)
 	std::cout << "OpenGL version " << render::Render::getVersion() << std::endl;
 
 	render::Render::setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	render::Render::enable(GL_DEPTH_TEST);
 
 	{
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
 		gameApp = std::make_shared<game::Game>(manager, glfwWindowSize);
-
-		glEnable(GL_DEPTH_TEST);
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 

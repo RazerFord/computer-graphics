@@ -22,6 +22,7 @@ public:
 	void use() const;
 
 	void setInt(const std::string & name, const GLint value) const;
+	void setFloat(const std::string & name, const GLfloat value) const;
 	void setMat4(const std::string & name, const glm::mat4 & value) const;
 
 	bool isCompiled() const;

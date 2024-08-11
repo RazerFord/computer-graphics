@@ -39,7 +39,7 @@ public:
 		const std::string & initialSubTexture,
 		const std::shared_ptr<ShaderProgram> & spShaderProgram);
 
-	void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const size_t frame = 0);
+	void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer = 0.0F, const size_t frame = 0);
 
 	size_t getFrameDuration(const size_t frame) const;
 	size_t getFramesCount() const;

@@ -62,7 +62,7 @@ Sprite::Sprite(
 Sprite::~Sprite()
 {}
 
-void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const size_t frame)
+void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer, const size_t frame)
 {
 	if (_lastFrame != frame)
 	{
@@ -89,6 +89,7 @@ void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const fl
 	model = glm::scale(model, glm::vec3(size, 1.0));
 
 	_spShaderProgram->setMat4("modelMat", model);
+	_spShaderProgram->setFloat("layer", layer);
 
 	glActiveTexture(GL_TEXTURE0);
 	_spTexture2D->bind();

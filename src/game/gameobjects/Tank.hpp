@@ -44,7 +44,8 @@ public:
 		 const std::shared_ptr<render::Sprite> & spriteLeft,
 		 const float velocity,
 		 const glm::vec2 & position,
-		 const glm::vec2 & size);
+		 const glm::vec2 & size, 
+		 const float layer);
 
 	void render() const override;
 	void update(const size_t delta) override;
