@@ -26,8 +26,8 @@ Game::~Game() {}
 void Game::render()
 {
 	_manager->getShader("spriteShader")->use();
-	_tank->render();
 	_level->render();
+	_tank->render();
 }
 
 void Game::update(const size_t delta)

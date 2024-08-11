@@ -18,31 +18,31 @@ std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::Resou
 	switch (descriptor)
 	{
 		case '0': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Right"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Right, manager, position, size, rotation);
 		}
 		case '1': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Bottom"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Bottom, manager, position, size, rotation);
 		}
 		case '2': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Left"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Left, manager, position, size, rotation);
 		}
 		case '3': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_Top"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::Top, manager, position, size, rotation);
 		}
 		case '4': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_All"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::All, manager, position, size, rotation);
 		}
 		case 'G': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_BottomLeft"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomLeft, manager, position, size, rotation);
 		}
 		case 'H': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_BottomRight"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::BottomRight, manager, position, size, rotation);
 		}
 		case 'I': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_TopLeft"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopLeft, manager, position, size, rotation);
 		}
 		case 'J': {
-			return std::make_shared<game::BrickWall>(manager.getSprite("brickWall_TopRight"), position, size, rotation);
+			return std::make_shared<game::BrickWall>(BrickWall::BrickWallType::TopRight, manager, position, size, rotation);
 		}
 		case 'D': {
 			return nullptr;
