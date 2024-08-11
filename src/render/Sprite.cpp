@@ -29,6 +29,7 @@ Sprite::Sprite(
 	const std::shared_ptr<ShaderProgram> & spShaderProgram)
 	: _spTexture2D(spTexture2D)
 	, _spShaderProgram(spShaderProgram)
+	, _lastFrame(0)
 {
 	const render::Texture2D::SubTexture2D & st = _spTexture2D->getSubTexture(initialSubTexture);
 
@@ -61,8 +62,22 @@ Sprite::Sprite(
 Sprite::~Sprite()
 {}
 
-void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const
+void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const size_t frame)
 {
+	if (_lastFrame != frame)
+	{
+		_lastFrame = frame;
+
+		const auto frameDescription = _framesDescription[frame];
+		const GLfloat textureCoords[]{
+			frameDescription.leftBottomUV.x, frameDescription.leftBottomUV.y,
+			frameDescription.leftBottomUV.x, frameDescription.rightTopUV.y,
+			frameDescription.rightTopUV.x, frameDescription.rightTopUV.y,
+			frameDescription.rightTopUV.x, frameDescription.leftBottomUV.y};
+
+		_textureCoordsBuffer.update(textureCoords, sizeof(textureCoords));
+	}
+
 	_spShaderProgram->use();
 
 	glm::mat4 model(1.0F);
@@ -79,5 +94,20 @@ void Sprite::render(const glm::vec2 & position, const glm::vec2 & size, const fl
 	_spTexture2D->bind();
 
 	Render::draw(_vertexArray, _indexBuffer, *_spShaderProgram);
+}
+
+size_t Sprite::getFrameDuration(const size_t frame) const
+{
+	return _framesDescription[frame].duration;
+}
+
+size_t Sprite::getFramesCount() const
+{
+	return _framesDescription.size();
+}
+
+void Sprite::setFrames(const std::vector<FrameDescription> & framesDescription)
+{
+	_framesDescription = framesDescription;
 }
 }// namespace render

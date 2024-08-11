@@ -72,9 +72,16 @@ bool Game::init()
 	_manager->loadJSON("resources.json");
 
 	auto program = _manager->getShader("spriteShader");
-	auto tankAnimatedSprite = _manager->getAnimatedSprite("tankSprite");
 
-	_tank = std::make_unique<game::Tank>(tankAnimatedSprite, 0.1F, glm::vec2(0.0F, 0.0F), glm::vec2(16.0F, 16.0F));
+	_tank = std::make_unique<game::Tank>(
+		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
+		0.1F,
+		glm::vec2(0.0F, 0.0F),
+		glm::vec2(16.0F, 16.0F));
+
 	_level = std::make_unique<game::Level>(_manager->levels().front(), *_manager);
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);

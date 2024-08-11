@@ -1,5 +1,4 @@
 #include "ResourceManager.hpp"
-#include "../render/AnimatedSprite.hpp"
 #include "../render/ShaderProgram.hpp"
 #include "../render/Sprite.hpp"
 #include "../render/Texture2D.hpp"
@@ -185,47 +184,6 @@ std::shared_ptr<render::Texture2D> ResourceManager::loadTextureAtlas(const std::
 	return spTexture;
 }
 
-
-std::shared_ptr<render::AnimatedSprite> ResourceManager::loadAnimatedSprite(
-	const std::string & spriteName,
-	const std::string & shaderName,
-	const std::string & textureName,
-	const std::string & subTextureName)
-{
-	auto texture = getTexture(textureName);
-	if (!texture)
-	{
-		std::cerr << "can't find texture " << textureName << " for animated sprite " << spriteName << std::endl;
-		return nullptr;
-	}
-
-	auto shader = getShader(shaderName);
-	if (!shader)
-	{
-		std::cerr << "can't find shader " << shaderName << " for animated sprite " << spriteName << std::endl;
-		return nullptr;
-	}
-
-	return _animatedSpriteStorage.emplace(spriteName,
-										  std::make_shared<render::AnimatedSprite>(
-											  texture,
-											  subTextureName,
-											  shader))
-		.first->second;
-}
-
-std::shared_ptr<render::AnimatedSprite> ResourceManager::getAnimatedSprite(const std::string & spriteName) const
-{
-	if (auto it = _animatedSpriteStorage.find(spriteName); it != _animatedSpriteStorage.end())
-	{
-		return it->second;
-	}
-
-	std::cerr << "can't find animated sprite \"" << spriteName << "\"" << std::endl;
-
-	return nullptr;
-}
-
 bool ResourceManager::loadJSON(const std::string & JSONPath)
 {
 	const std::string json = readFile(JSONPath);
@@ -306,39 +264,19 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 				std::cerr << "can't create sprite \"" << "tankSprite" << "\"" << std::endl;
 				return false;
 			}
-		}
-	}
 
-	auto animatedSpritesIterator = document.FindMember("animatedSprites");
-	if (animatedSpritesIterator != document.MemberEnd())
-	{
-		for (const auto & currentAnimatedSprite: animatedSpritesIterator->value.GetArray())
-		{
-			const std::string name = currentAnimatedSprite["name"].GetString();
-			const std::string shaderName = currentAnimatedSprite["shaderName"].GetString();
-			const std::string textureName = currentAnimatedSprite["textureName"].GetString();
-			const std::string initSubTextureName = currentAnimatedSprite["initSubTextureName"].GetString();
-
-			auto animatedSprite = loadAnimatedSprite(name, shaderName, textureName, initSubTextureName);
-			if (!animatedSprite)
+			auto framesIterator = currentSprite.FindMember("frames");
+			if (framesIterator != currentSprite.MemberEnd())
 			{
-				std::cerr << "can't create sprite \"" << "tankSprite" << "\"" << std::endl;
-				return false;
-			}
-
-			const auto states = currentAnimatedSprite["states"].GetArray();
-			for (const auto & state: states)
-			{
-				const std::string stateName = state["name"].GetString();
-				const auto frames = state["frames"].GetArray();
-				render::AnimatedSprite::States animatedStates;
-				for (const auto & frame: frames)
+				std::vector<render::Sprite::FrameDescription> framesDescription;
+				for (const auto & frame: framesIterator->value.GetArray())
 				{
-					const std::string subTextureName = frame["subTextureName"].GetString();
-					const int duration = frame["duration"].GetUint64();
-					animatedStates.emplace_back(subTextureName, duration);
+					const std::string subTextureName = frame["subTexture"].GetString();
+					const size_t duration = frame["duration"].GetUint64();
+					const auto subTexture = getTexture(textureAtlas)->getSubTexture(subTextureName);
+					framesDescription.push_back({subTexture.leftBottomUV, subTexture.rightTopUV, duration});
 				}
-				animatedSprite->insertState(stateName, animatedStates);
+				sprite->setFrames(framesDescription);
 			}
 		}
 	}

@@ -7,6 +7,7 @@
 #include <glm/vec2.hpp>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace render
 {
@@ -15,6 +16,13 @@ class ShaderProgram;
 
 class Sprite
 {
+public:
+	struct FrameDescription {
+		glm::vec2 leftBottomUV;
+		glm::vec2 rightTopUV;
+		size_t duration;
+	};
+
 protected:
 	std::shared_ptr<Texture2D> _spTexture2D;
 	std::shared_ptr<ShaderProgram> _spShaderProgram;
@@ -22,8 +30,8 @@ protected:
 	IndexBuffer _indexBuffer;
 	VertexBuffer _vertexCoordsBuffer;
 	VertexBuffer _textureCoordsBuffer;
-	glm::vec2 _currentLeftBottomUV;
-	glm::vec2 _currentRightTopUV;
+	std::vector<FrameDescription> _framesDescription;
+	size_t _lastFrame;
 
 public:
 	Sprite(
@@ -31,8 +39,13 @@ public:
 		const std::string & initialSubTexture,
 		const std::shared_ptr<ShaderProgram> & spShaderProgram);
 
-	virtual void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation) const;
+	void render(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const size_t frame = 0);
 
-	virtual ~Sprite();
+	size_t getFrameDuration(const size_t frame) const;
+	size_t getFramesCount() const;
+
+	void setFrames(const std::vector<FrameDescription> & framesDescription);
+
+	~Sprite();
 };
 }// namespace render

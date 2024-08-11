@@ -14,8 +14,8 @@ add_executable(BattleCity
     src/render/Texture2D.cpp
     src/render/Sprite.hpp
     src/render/Sprite.cpp
-    src/render/AnimatedSprite.hpp
-    src/render/AnimatedSprite.cpp
+    src/render/SpriteAnimator.hpp
+    src/render/SpriteAnimator.cpp    
     src/render/VertexArray.hpp
     src/render/VertexArray.cpp
     src/render/VertexBuffer.hpp
