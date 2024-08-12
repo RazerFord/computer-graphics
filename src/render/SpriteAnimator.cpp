@@ -16,7 +16,7 @@ size_t SpriteAnimator::getCurrentFrame() const
 	return _currentFrame;
 }
 
-void SpriteAnimator::update(const size_t delta)
+void SpriteAnimator::update(const double delta)
 {
 	_currentAnimationTime += delta;
 	size_t countFrames = _sprite->getFramesCount();

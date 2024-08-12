@@ -83,7 +83,7 @@ void ConcreteWall::render() const
 	}
 }
 
-void ConcreteWall::update(const size_t delta)
+void ConcreteWall::update(const double delta)
 {
 	// ConcreteWall static object
 }

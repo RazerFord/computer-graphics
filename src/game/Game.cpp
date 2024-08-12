@@ -30,7 +30,7 @@ void Game::render()
 	_level->render();
 }
 
-void Game::update(const size_t delta)
+void Game::update(const double delta)
 {
 	_level->update(delta);
 
@@ -73,17 +73,20 @@ bool Game::init()
 
 	auto program = _manager->getShader("spriteShader");
 
+	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
+
 	_tank = std::make_unique<game::Tank>(
 		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
-		0.1F,
-		glm::vec2(0.0F, 0.0F),
-		glm::vec2(16.0F, 16.0F),
+		_manager->getSprite("respawn"),
+		_manager->getSprite("shield"),
+		0.05F,
+		_level->getPlayerRespawn1(),
+		glm::vec2(game::BLOCK_SIZE, game::BLOCK_SIZE),
 		0.0F);
 
-	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
 	_glfwWindowSize.x = _level->getLevelWidth();
 	_glfwWindowSize.y = _level->getLevelHeight();
 

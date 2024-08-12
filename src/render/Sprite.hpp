@@ -20,7 +20,7 @@ public:
 	struct FrameDescription {
 		glm::vec2 leftBottomUV;
 		glm::vec2 rightTopUV;
-		size_t duration;
+		double duration;
 	};
 
 protected:

@@ -9,6 +9,6 @@ IGameObject::IGameObject(const glm::vec2 & position, const glm::vec2 & size, con
 	, _layer(layer)
 {}
 
-void IGameObject::update(const size_t delta)
+void IGameObject::update(const double delta)
 {}
 }// namespace game

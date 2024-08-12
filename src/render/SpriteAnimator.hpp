@@ -18,6 +18,6 @@ public:
 
 	size_t getCurrentFrame() const;
 
-	void update(const size_t delta);
+	void update(const double delta);
 };
 }// namespace render

@@ -97,7 +97,7 @@ void BrickWall::render() const
 	}
 }
 
-void BrickWall::update(const size_t delta)
+void BrickWall::update(const double delta)
 {
 	// BrickWall static object
 }

@@ -13,8 +13,6 @@
 
 namespace game
 {
-const int BLOCK_SIZE = 16;
-
 std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::ResourceManager & manager,
 														  const char descriptor,
 														  const glm::vec2 & position,
@@ -101,12 +99,38 @@ Level::Level(const std::vector<std::string> & description, const resources::Reso
 	_gameObjects.reserve(_height * _width + 4);
 	int currentBottomOffset = BLOCK_SIZE * (_height - 1) + BLOCK_SIZE / 2;
 
+	_playerRespawn1 = {BLOCK_SIZE * (_width / 2 - 1), BLOCK_SIZE / 2};
+	_playerRespawn2 = {BLOCK_SIZE * (_width / 2 + 3), BLOCK_SIZE / 2};
+	_enemyRespawn1 = {BLOCK_SIZE, BLOCK_SIZE * _height - BLOCK_SIZE / 2};
+	_enemyRespawn1 = {BLOCK_SIZE * (_width + 1), BLOCK_SIZE * _height - BLOCK_SIZE / 2};
+	_enemyRespawn1 = {BLOCK_SIZE * _width, BLOCK_SIZE * _height - BLOCK_SIZE / 2};
+
 	for (const std::string & currentRow: description)
 	{
 		int currentLeftOffset = BLOCK_SIZE;
 		for (const char currentElement: currentRow)
 		{
-			_gameObjects.emplace_back(makeGameObjectFromDescriptor(manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
+			switch (currentElement)
+			{
+				case 'K': {
+					_playerRespawn1 = {currentLeftOffset, currentBottomOffset};
+				}
+				case 'L': {
+					_playerRespawn2 = {currentLeftOffset, currentBottomOffset};
+				}
+				case 'M': {
+					_enemyRespawn1 = {currentLeftOffset, currentBottomOffset};
+				}
+				case 'N': {
+					_enemyRespawn2 = {currentLeftOffset, currentBottomOffset};
+				}
+				case 'O': {
+					_enemyRespawn3 = {currentLeftOffset, currentBottomOffset};
+				}
+				default: {
+					_gameObjects.emplace_back(makeGameObjectFromDescriptor(manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
+				}
+			}
 			currentLeftOffset += BLOCK_SIZE;
 		}
 		currentBottomOffset -= BLOCK_SIZE;
@@ -133,7 +157,7 @@ void Level::render() const
 	}
 }
 
-void Level::update(const size_t delta)
+void Level::update(const double delta)
 {
 	for (const auto & gameObject: _gameObjects)
 	{
@@ -152,5 +176,30 @@ size_t Level::getLevelWidth() const
 size_t Level::getLevelHeight() const
 {
 	return (_height + 1) * BLOCK_SIZE;
+}
+
+const glm::ivec2 Level::getPlayerRespawn1() const
+{
+	return _playerRespawn1;
+}
+
+const glm::ivec2 Level::getPlayerRespawn2() const
+{
+	return _playerRespawn2;
+}
+
+const glm::ivec2 Level::getEnemyRespawn1() const
+{
+	return _enemyRespawn1;
+}
+
+const glm::ivec2 Level::getEnemyRespawn2() const
+{
+	return _enemyRespawn2;
+}
+
+const glm::ivec2 Level::getEnemyRespawn3() const
+{
+	return _enemyRespawn3;
 }
 }// namespace game

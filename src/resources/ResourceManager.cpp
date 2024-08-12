@@ -272,7 +272,7 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 				for (const auto & frame: framesIterator->value.GetArray())
 				{
 					const std::string subTextureName = frame["subTexture"].GetString();
-					const size_t duration = frame["duration"].GetUint64();
+					const double duration = frame["duration"].GetDouble();
 					const auto subTexture = getTexture(textureAtlas)->getSubTexture(subTextureName);
 					framesDescription.push_back({subTexture.leftBottomUV, subTexture.rightTopUV, duration});
 				}

@@ -40,7 +40,7 @@ public:
 
 	virtual void render() const override;
 
-	virtual void update(const size_t delta) override;
+	virtual void update(const double delta) override;
 
 private:
 	void renderBrick(const WaterLocation & location) const;

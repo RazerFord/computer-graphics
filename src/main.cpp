@@ -95,7 +95,7 @@ int main(int _, char ** argv)
 	{
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
 		gameApp = std::make_shared<game::Game>(manager, glfwWindowSize);
-		glfwSetWindowSize(window, gameApp->getCurrentLevelWidth(), gameApp->getCurrentLevelHeight());
+		glfwSetWindowSize(window, 3 * gameApp->getCurrentLevelWidth(), 3 * gameApp->getCurrentLevelHeight());
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 

@@ -56,7 +56,7 @@ public:
 	ConcreteWall(const ConcreteWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
 
 	virtual void render() const override;
-	virtual void update(const size_t delta) override;
+	virtual void update(const double delta) override;
 
 private:
 	void renderBlock(const BlockLocation & location) const;

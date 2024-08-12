@@ -34,7 +34,7 @@ public:
 	~Game();
 
 	void render();
-	void update(const size_t delta);
+	void update(const double delta);
 	void setKey(const int key, const int action);
 
 	bool init();

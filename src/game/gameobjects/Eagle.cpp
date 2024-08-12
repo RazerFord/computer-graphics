@@ -19,7 +19,7 @@ void Eagle::render() const
 	_sprites[static_cast<size_t>(_currentState)]->render(_position, _size, _rotation, _layer);
 }
 
-void Eagle::update(const size_t delta)
+void Eagle::update(const double delta)
 {
 	// TODO: implement me
 }
