@@ -24,5 +24,8 @@ public:
 	Level(const std::vector<std::string> & description, const resources::ResourceManager & manager);
 	void render() const;
 	void update(const size_t delta);
+
+	size_t getLevelWidth() const;
+	size_t getLevelHeight() const;
 };
 }// namespace game

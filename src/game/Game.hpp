@@ -38,5 +38,8 @@ public:
 	void setKey(const int key, const int action);
 
 	bool init();
+
+	size_t getCurrentLevelWidth() const;
+	size_t getCurrentLevelHeight() const;
 };
 }// namespace game

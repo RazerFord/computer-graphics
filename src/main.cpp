@@ -15,7 +15,7 @@
 #include <memory>
 
 std::shared_ptr<game::Game> gameApp;
-glm::ivec2 glfwWindowSize(13 * 16, 14 * 16);
+glm::ivec2 glfwWindowSize(16 * 16, 15 * 16);
 // glm::ivec2 glfwWindowSize(640, 480);
 
 void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
@@ -23,7 +23,7 @@ void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 	glfwWindowSize.x = width;
 	glfwWindowSize.y = height;
 
-	const float aspectRation = 13.0F / 14.0F;
+	const float aspectRation = static_cast<float>(gameApp->getCurrentLevelWidth()) / gameApp->getCurrentLevelHeight();
 	int viewportWidth = width;
 	int viewportHeight = height;
 	int leftOffset = 0;
@@ -95,6 +95,7 @@ int main(int _, char ** argv)
 	{
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
 		gameApp = std::make_shared<game::Game>(manager, glfwWindowSize);
+		glfwSetWindowSize(window, gameApp->getCurrentLevelWidth(), gameApp->getCurrentLevelHeight());
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 

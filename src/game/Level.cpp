@@ -1,5 +1,6 @@
 #include "Level.hpp"
 #include "../resources/ResourceManager.hpp"
+#include "gameobjects/Border.hpp"
 #include "gameobjects/BrickWall.hpp"
 #include "gameobjects/ConcreteWall.hpp"
 #include "gameobjects/Eagle.hpp"
@@ -96,12 +97,13 @@ Level::Level(const std::vector<std::string> & description, const resources::Reso
 	_height = description.size();
 	_width = description[0].size();
 
-	_gameObjects.reserve(_height * _width);
-	int currentBottomOffset = BLOCK_SIZE * (_height - 1);
+	// +4 for border
+	_gameObjects.reserve(_height * _width + 4);
+	int currentBottomOffset = BLOCK_SIZE * (_height - 1) + BLOCK_SIZE / 2;
 
 	for (const std::string & currentRow: description)
 	{
-		int currentLeftOffset = 0;
+		int currentLeftOffset = BLOCK_SIZE;
 		for (const char currentElement: currentRow)
 		{
 			_gameObjects.emplace_back(makeGameObjectFromDescriptor(manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
@@ -109,6 +111,15 @@ Level::Level(const std::vector<std::string> & description, const resources::Reso
 		}
 		currentBottomOffset -= BLOCK_SIZE;
 	}
+
+	// border bottom
+	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{BLOCK_SIZE, 0.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
+	// border top
+	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{BLOCK_SIZE, _height * BLOCK_SIZE + BLOCK_SIZE / 2.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
+	// border left
+	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{0.0F, 0.0F}, glm::vec2{BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
+	// border right
+	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{(_width + 1) * BLOCK_SIZE, 0.0F}, glm::vec2{2 * BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
 }
 
 void Level::render() const
@@ -131,5 +142,15 @@ void Level::update(const size_t delta)
 			gameObject->update(delta);
 		}
 	}
+}
+
+size_t Level::getLevelWidth() const
+{
+	return (_width + 3) * BLOCK_SIZE;
+}
+
+size_t Level::getLevelHeight() const
+{
+	return (_height + 1) * BLOCK_SIZE;
 }
 }// namespace game

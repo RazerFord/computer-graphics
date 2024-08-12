@@ -84,6 +84,8 @@ bool Game::init()
 		0.0F);
 
 	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
+	_glfwWindowSize.x = _level->getLevelWidth();
+	_glfwWindowSize.y = _level->getLevelHeight();
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);
 
@@ -92,5 +94,15 @@ bool Game::init()
 	program->setMat4("projectionMat", projection);
 
 	return true;
+}
+
+size_t Game::getCurrentLevelWidth() const
+{
+	return _level->getLevelWidth();
+}
+
+size_t Game::getCurrentLevelHeight() const
+{
+	return _level->getLevelHeight();
 }
 }// namespace game

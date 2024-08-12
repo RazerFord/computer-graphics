@@ -29,6 +29,8 @@ add_executable(BattleCity
     src/game/Game.cpp
     src/game/Level.hpp
     src/game/Level.cpp
+    src/game/gameobjects/Border.hpp
+    src/game/gameobjects/Border.cpp
     src/game/gameobjects/ConcreteWall.hpp
     src/game/gameobjects/ConcreteWall.cpp
     src/game/gameobjects/Eagle.hpp
