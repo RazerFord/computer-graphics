@@ -49,6 +49,8 @@ add_executable(BattleCity
     src/game/gameobjects/Water.cpp
     src/utils/Timer.hpp
     src/utils/Timer.cpp
+    src/physics/PhysicsEngine.hpp
+    src/physics/PhysicsEngine.cpp
 )
 
 add_subdirectory(external/glfw)

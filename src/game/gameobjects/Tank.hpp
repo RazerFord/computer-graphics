@@ -40,9 +40,7 @@ private:
 	render::SpriteAnimator _spriteAnimatorRespawn;
 	render::SpriteAnimator _spriteAnimatorShield;
 
-	double _velocity;
-	glm::vec2 _moveOffset;
-	bool _move;
+	double _maxVelocity;
 	bool _isSpawning;
 	bool _hasShield;
 
@@ -56,7 +54,7 @@ public:
 		 const std::shared_ptr<render::Sprite> & spriteLeft,
 		 const std::shared_ptr<render::Sprite> & spriteRespawn,
 		 const std::shared_ptr<render::Sprite> & spriteShield,
-		 const double velocity,
+		 const double maxVelocity,
 		 const glm::vec2 & position,
 		 const glm::vec2 & size,
 		 const float layer);
@@ -64,6 +62,9 @@ public:
 	void render() const override;
 	void update(const double delta) override;
 	void setOrientation(const Orientation orientation);
-	void setMove(const bool move);
+
+	void velocity(const double velocity) override;
+
+	double maxVelocity() const;
 };
 }// namespace game

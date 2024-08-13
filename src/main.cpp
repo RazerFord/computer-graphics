@@ -1,4 +1,5 @@
 #include "game/Game.hpp"
+#include "physics/PhysicsEngine.hpp"
 #include "render/Render.hpp"
 #include "resources/ResourceManager.hpp"
 #include <GLFW/glfw3.h>
@@ -94,7 +95,8 @@ int main(int _, char ** argv)
 
 	{
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
-		gameApp = std::make_shared<game::Game>(manager, glfwWindowSize);
+		auto physicsEngine = std::make_shared<physics::PhysicsEngine>();
+		gameApp = std::make_shared<game::Game>(manager, physicsEngine, glfwWindowSize);
 		glfwSetWindowSize(window, 3 * gameApp->getCurrentLevelWidth(), 3 * gameApp->getCurrentLevelHeight());
 
 		auto lastTime = std::chrono::high_resolution_clock::now();

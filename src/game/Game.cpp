@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "../physics/PhysicsEngine.hpp"
 #include "../render/ShaderProgram.hpp"
 #include "../resources/ResourceManager.hpp"
 #include "Level.hpp"
@@ -12,8 +13,9 @@
 namespace game
 {
 
-Game::Game(const std::shared_ptr<resources::ResourceManager> & manager, const glm::ivec2 glfwWindowSize)
+Game::Game(const std::shared_ptr<resources::ResourceManager> & manager, const std::shared_ptr<physics::PhysicsEngine> & physicsEngine, const glm::ivec2 glfwWindowSize)
 	: _manager(manager)
+	, _physicsEngine(physicsEngine)
 	, _glfwWindowSize(glfwWindowSize)
 	, _currentGameState(GameState::Active)
 {
@@ -37,29 +39,31 @@ void Game::update(const double delta)
 	if (_keys[GLFW_KEY_W])
 	{
 		_tank->setOrientation(Orientation::Up);
-		_tank->setMove(true);
+		_tank->velocity(_tank->maxVelocity());
 	}
 	else if (_keys[GLFW_KEY_A])
 	{
 		_tank->setOrientation(Orientation::Left);
-		_tank->setMove(true);
+		_tank->velocity(_tank->maxVelocity());
 	}
 	else if (_keys[GLFW_KEY_D])
 	{
 		_tank->setOrientation(Orientation::Right);
-		_tank->setMove(true);
+		_tank->velocity(_tank->maxVelocity());
 	}
 	else if (_keys[GLFW_KEY_S])
 	{
 		_tank->setOrientation(Orientation::Down);
-		_tank->setMove(true);
+		_tank->velocity(_tank->maxVelocity());
 	}
 	else
 	{
-		_tank->setMove(false);
+		_tank->velocity(0.0);
 	}
 
 	_tank->update(delta);
+
+	_physicsEngine->update(delta);
 }
 
 void Game::setKey(const int key, const int action)
@@ -73,9 +77,9 @@ bool Game::init()
 
 	auto program = _manager->getShader("spriteShader");
 
-	_level = std::make_unique<game::Level>(_manager->levels().back(), *_manager);
+	_level = std::make_shared<game::Level>(_manager->levels().back(), *_manager);
 
-	_tank = std::make_unique<game::Tank>(
+	_tank = std::make_shared<game::Tank>(
 		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
@@ -86,6 +90,8 @@ bool Game::init()
 		_level->getPlayerRespawn1(),
 		glm::vec2(game::BLOCK_SIZE, game::BLOCK_SIZE),
 		0.0F);
+
+	_physicsEngine->addDynamicObject(_tank);
 
 	_glfwWindowSize.x = _level->getLevelWidth();
 	_glfwWindowSize.y = _level->getLevelHeight();

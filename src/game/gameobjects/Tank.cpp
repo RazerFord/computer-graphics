@@ -10,7 +10,7 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		   const std::shared_ptr<render::Sprite> & spriteLeft,
 		   const std::shared_ptr<render::Sprite> & spriteRespawn,
 		   const std::shared_ptr<render::Sprite> & spriteShield,
-		   const double velocity,
+		   const double maxVelocity,
 		   const glm::vec2 & position,
 		   const glm::vec2 & size,
 		   const float layer)
@@ -28,9 +28,7 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 	, _spriteAnimatorLeft(spriteLeft)
 	, _spriteAnimatorRespawn(spriteRespawn)
 	, _spriteAnimatorShield(spriteShield)
-	, _velocity(velocity)
-	, _moveOffset(0.0F, 1.0F)
-	, _move(false)
+	, _maxVelocity(maxVelocity)
 	, _isSpawning(true)
 	, _hasShield(false)
 {
@@ -77,7 +75,7 @@ void Tank::render() const
 
 		if (_hasShield)
 		{
-			_spriteShield->render(_position, _size, _rotation, _layer, _spriteAnimatorShield.getCurrentFrame());
+			_spriteShield->render(_position, _size, _rotation, _layer + 0.1F, _spriteAnimatorShield.getCurrentFrame());
 		}
 	}
 }
@@ -97,11 +95,8 @@ void Tank::update(const double delta)
 			_shieldTimer.update(delta);
 		}
 
-		if (_move)
+		if (_velocity > 0.0)
 		{
-			_position.x += delta * _velocity * _moveOffset.x;
-			_position.y += delta * _velocity * _moveOffset.y;
-
 			switch (_orientation)
 			{
 				case game::Orientation::Up: {
@@ -136,27 +131,35 @@ void Tank::setOrientation(const Orientation orientation)
 	switch (_orientation)
 	{
 		case game::Orientation::Up: {
-			_moveOffset = {0.0, 1.0};
+			_direction = {0.0, 1.0};
 			break;
 		}
 		case game::Orientation::Down: {
-			_moveOffset = {0.0, -1.0};
+			_direction = {0.0, -1.0};
 			break;
 		}
 		case game::Orientation::Left: {
-			_moveOffset = {-1.0, 0.0};
+			_direction = {-1.0, 0.0};
 			break;
 		}
 		case game::Orientation::Right: {
-			_moveOffset = {1.0, 0.0};
+			_direction = {1.0, 0.0};
 			break;
 		}
 	}
 }
 
-void Tank::setMove(const bool move)
+void Tank::velocity(const double velocity)
 {
-	_move = move;
+	if (!_isSpawning)
+	{
+		_velocity = velocity;
+	}
 }
 
+
+double Tank::maxVelocity() const
+{
+	return _maxVelocity;
+}
 }// namespace game

@@ -9,6 +9,11 @@ namespace resources
 class ResourceManager;
 }
 
+namespace physics
+{
+class PhysicsEngine;
+}
+
 namespace game
 {
 class Tank;
@@ -18,6 +23,7 @@ class Game
 {
 private:
 	std::shared_ptr<resources::ResourceManager> _manager;
+	std::shared_ptr<physics::PhysicsEngine> _physicsEngine;
 	glm::ivec2 _glfwWindowSize;
 	std::array<bool, 350> _keys;
 	enum class GameState
@@ -26,11 +32,11 @@ private:
 		Pause,
 	} _currentGameState;
 
-	std::unique_ptr<Tank> _tank;
-	std::unique_ptr<Level> _level;
+	std::shared_ptr<Tank> _tank;
+	std::shared_ptr<Level> _level;
 
 public:
-	Game(const std::shared_ptr<resources::ResourceManager> & manager, const glm::ivec2 glfwWindowSize);
+	Game(const std::shared_ptr<resources::ResourceManager> & manager, const std::shared_ptr<physics::PhysicsEngine> & _physicsEngine, const glm::ivec2 glfwWindowSize);
 	~Game();
 
 	void render();
