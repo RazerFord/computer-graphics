@@ -1,6 +1,7 @@
 #include "PhysicsEngine.hpp"
 #include "../game/Level.hpp"
 #include "../game/gameobjects/IGameObject.hpp"
+#include <iostream>
 
 namespace physics
 {
@@ -73,7 +74,8 @@ bool PhysicsEngine::hasIntersection(const glm::vec2 & position1, const std::vect
 			const auto bottomLeft2 = position2 + collider2.bottomLeft;
 			const auto topRight2 = position2 + collider2.topRight;
 
-			if (std::max(bottomLeft1.x, bottomLeft2.x) < std::min(topRight1.x, topRight2.x) && std::max(topRight1.y, topRight2.y) < std::min(bottomLeft1.y, bottomLeft2.y))
+			if (std::max(bottomLeft1.x, bottomLeft2.x) < std::min(topRight1.x, topRight2.x) 
+			 && std::max(bottomLeft1.y, bottomLeft2.y) < std::min(topRight1.y, topRight2.y))
 			{
 				return true;
 			}
