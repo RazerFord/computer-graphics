@@ -41,5 +41,7 @@ public:
 	const glm::ivec2 getEnemyRespawn1() const;
 	const glm::ivec2 getEnemyRespawn2() const;
 	const glm::ivec2 getEnemyRespawn3() const;
+
+	std::vector<std::shared_ptr<IGameObject>> objectsInArea(const glm::vec2 & bottomLeft, const glm::vec2 & topRight) const;
 };
 }// namespace game

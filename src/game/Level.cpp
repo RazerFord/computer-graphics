@@ -8,6 +8,8 @@
 #include "gameobjects/Ice.hpp"
 #include "gameobjects/Trees.hpp"
 #include "gameobjects/Water.hpp"
+#include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <memory>
 
@@ -201,5 +203,35 @@ const glm::ivec2 Level::getEnemyRespawn2() const
 const glm::ivec2 Level::getEnemyRespawn3() const
 {
 	return _enemyRespawn3;
+}
+
+std::vector<std::shared_ptr<IGameObject>> Level::objectsInArea(const glm::vec2 & bottomLeft, const glm::vec2 & topRight) const
+{
+	std::vector<std::shared_ptr<IGameObject>> objects;
+
+	glm::vec2 bottomLeftConverted(std::clamp(bottomLeft.x - BLOCK_SIZE, 0.0F, static_cast<float>(_width * BLOCK_SIZE)),
+								  std::clamp(_height * BLOCK_SIZE - bottomLeft.y + BLOCK_SIZE / 2.0F, 0.0F, static_cast<float>(_height * BLOCK_SIZE)));
+	glm::vec2 topRightConverted(std::clamp(topRight.x - BLOCK_SIZE, 0.0F, static_cast<float>(_width * BLOCK_SIZE)),
+								std::clamp(_height * BLOCK_SIZE - topRight.y + BLOCK_SIZE / 2.0F, 0.0F, static_cast<float>(_height * BLOCK_SIZE)));
+
+	size_t startX = std::floor(bottomLeftConverted.x / BLOCK_SIZE);
+	size_t endX = std::ceil(topRightConverted.x / BLOCK_SIZE);
+
+	size_t startY = std::floor(topRightConverted.y / BLOCK_SIZE);
+	size_t endY = std::ceil(bottomLeftConverted.y / BLOCK_SIZE);
+
+	for (size_t j = startY; j < endY; j++)
+	{
+		for (size_t i = startX; i < endX; i++)
+		{
+			auto & currentObject = _gameObjects[j * _width + i];
+			if (currentObject)
+			{
+				objects.push_back(currentObject);
+			}
+		}
+	}
+
+	return objects;
 }
 }// namespace game

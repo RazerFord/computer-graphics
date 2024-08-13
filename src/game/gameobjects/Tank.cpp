@@ -43,6 +43,8 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 	});
 
 	_respawnTimer.start(2000);
+
+	_colliders.push_back({glm::vec2(0), _size});
 }
 
 void Tank::render() const

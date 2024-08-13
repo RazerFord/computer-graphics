@@ -79,6 +79,8 @@ bool Game::init()
 
 	_level = std::make_shared<game::Level>(_manager->levels().back(), *_manager);
 
+	_physicsEngine->currentLevel(_level);
+
 	_tank = std::make_shared<game::Tank>(
 		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),

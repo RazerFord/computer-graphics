@@ -16,6 +16,11 @@ const glm::vec2 & IGameObject::position() const
 	return _position;
 }
 
+const glm::vec2 & IGameObject::size() const
+{
+	return _size;
+}
+
 const glm::vec2 & IGameObject::direction() const
 {
 	return _direction;
@@ -24,6 +29,11 @@ const glm::vec2 & IGameObject::direction() const
 double IGameObject::velocity() const
 {
 	return _velocity;
+}
+
+const std::vector<physics::AABB> IGameObject::colliders() const
+{
+	return _colliders;
 }
 
 void IGameObject::position(const glm::vec2 & position)
