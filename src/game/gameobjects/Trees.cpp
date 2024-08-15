@@ -6,7 +6,7 @@
 namespace game
 {
 Trees::Trees(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(GameObjectType::Trees, position, size, rotation, layer)
 	, _sprite{manager.getSprite("trees")}
 	, _offsets{
 		  glm::vec2(0.0F, _size.y / 2.0F),

@@ -6,7 +6,7 @@
 namespace game
 {
 ConcreteWall::ConcreteWall(const ConcreteWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(GameObjectType::ConcreteWall, position, size, rotation, layer)
 	, _sprite{manager.getSprite("betonWall")}
 	, _states{
 		  ConcreteState::Destroyed,

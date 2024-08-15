@@ -16,7 +16,7 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		   const glm::vec2 & position,
 		   const glm::vec2 & size,
 		   const float layer)
-	: IGameObject(position, size, 0.0F, layer)
+	: IGameObject(GameObjectType::Tank, position, size, 0.0F, layer)
 	, _orientation(Orientation::Up)
 	, _spriteUp(spriteUp)
 	, _spriteRight(spriteRight)
@@ -57,6 +57,7 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 	_respawnTimer.start(2000);
 
 	_colliders.push_back({glm::vec2(0), _size});
+	_physicsEngine->addDynamicObject(_bullet);
 }
 
 void Tank::render() const
@@ -185,8 +186,7 @@ void Tank::fire()
 {
 	if (!_bullet->isActive())
 	{
-		_bullet->fire({_position.x + _size.x / 4.0F, _position.y + _size.y / 1.5F}, _direction);
-		_physicsEngine->addDynamicObject(_bullet);
+		_bullet->fire(_position + _size / 4.0F + _size * _direction / 4.0F, _direction);
 	}
 }
 }// namespace game

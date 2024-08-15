@@ -49,14 +49,19 @@ void PhysicsEngine::update(const double delta)
 				bool hasCollision = false;
 				for (const auto & o: objects)
 				{
-					if (hasIntersection(np, colliders, o->position(), o->colliders()))
+					if (o->colliders(object->gameObjectType()) && hasIntersection(np, colliders, o->position(), o->colliders()))
 					{
 						hasCollision = true;
+						o->onCollision();
 						break;
 					}
 				}
 
-				if (!hasCollision)
+				if (hasCollision)
+				{
+					object->onCollision();
+				}
+				else
 				{
 					object->position(np);
 				}

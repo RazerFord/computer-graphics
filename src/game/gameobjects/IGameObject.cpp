@@ -2,8 +2,9 @@
 
 namespace game
 {
-IGameObject::IGameObject(const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: _position(position)
+IGameObject::IGameObject(const GameObjectType & gameObjectType, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
+	: _gameObjectType(gameObjectType)
+	, _position(position)
 	, _size(size)
 	, _rotation(rotation)
 	, _layer(layer)
@@ -36,6 +37,11 @@ const std::vector<physics::AABB> IGameObject::colliders() const
 	return _colliders;
 }
 
+IGameObject::GameObjectType IGameObject::gameObjectType() const
+{
+	return _gameObjectType;
+}
+
 void IGameObject::position(const glm::vec2 & position)
 {
 	_position = position;
@@ -46,6 +52,14 @@ void IGameObject::velocity(const double velocity)
 	_velocity = velocity;
 }
 
+bool IGameObject::colliders(const GameObjectType & gameObjectType) const
+{
+	return true;
+}
+
 void IGameObject::update(const double delta)
+{}
+
+void IGameObject::onCollision()
 {}
 }// namespace game

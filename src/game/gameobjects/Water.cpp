@@ -6,7 +6,7 @@
 namespace game
 {
 Water::Water(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(GameObjectType::Water, position, size, rotation, layer)
 	, _sprite{manager.getSprite("water")}
 	, _spriteAnimator{_sprite}
 	, _offsets{
@@ -17,6 +17,11 @@ Water::Water(const resources::ResourceManager & manager, const glm::vec2 & posit
 	  }
 {
 	_colliders.push_back({glm::vec2(0), _size});
+}
+
+bool Water::colliders(const IGameObject::GameObjectType & gameObjectType) const
+{
+	return gameObjectType != IGameObject::GameObjectType::Bullet;
 }
 
 void Water::render() const

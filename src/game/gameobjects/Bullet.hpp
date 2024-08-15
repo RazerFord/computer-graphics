@@ -22,6 +22,7 @@ private:
 	std::shared_ptr<render::Sprite> _spriteDown;
 	std::shared_ptr<render::Sprite> _spriteLeft;
 	bool _isActive;
+	double _maxVelocity;
 
 public:
 	Bullet(const std::shared_ptr<render::Sprite> & spriteUp,
@@ -38,5 +39,7 @@ public:
 	bool isActive() const;
 
 	void fire(const glm::vec2 & position, const glm::vec2 & direction);
+
+	virtual void onCollision() override;
 };
 }// namespace game

@@ -6,7 +6,7 @@
 namespace game
 {
 BrickWall::BrickWall(const BrickWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(GameObjectType::BrickWall, position, size, rotation, layer)
 	, _states{
 		  BrickWall::BrickState::Destroyed,
 		  BrickWall::BrickState::Destroyed,

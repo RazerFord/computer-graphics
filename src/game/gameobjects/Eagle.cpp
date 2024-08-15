@@ -6,7 +6,7 @@
 namespace game
 {
 Eagle::Eagle(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(GameObjectType::Eagle, position, size, rotation, layer)
 	, _sprites{
 		  manager.getSprite("eagle"),
 		  manager.getSprite("eagle_dead"),

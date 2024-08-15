@@ -12,37 +12,40 @@ Bullet::Bullet(const std::shared_ptr<render::Sprite> & spriteUp,
 			   const glm::vec2 & position,
 			   const glm::vec2 & size,
 			   const float layer)
-	: IGameObject(position, size, 0.0F, layer)
+	: IGameObject(GameObjectType::Bullet, position, size, 0.0F, layer)
 	, _orientation(Orientation::Up)
 	, _spriteUp(spriteUp)
 	, _spriteRight(spriteRight)
 	, _spriteDown(spriteDown)
 	, _spriteLeft(spriteLeft)
 	, _isActive(false)
+	, _maxVelocity(velocity)
 {
-	_velocity = velocity;
 	_colliders.push_back({glm::vec2(0), _size});
 }
 
 void Bullet::render() const
 {
-	switch (_orientation)
+	if (_isActive)
 	{
-		case game::Orientation::Up: {
-			_spriteUp->render(_position, _size, _rotation, _layer);
-			break;
-		}
-		case game::Orientation::Down: {
-			_spriteDown->render(_position, _size, _rotation, _layer);
-			break;
-		}
-		case game::Orientation::Left: {
-			_spriteLeft->render(_position, _size, _rotation, _layer);
-			break;
-		}
-		case game::Orientation::Right: {
-			_spriteRight->render(_position, _size, _rotation, _layer);
-			break;
+		switch (_orientation)
+		{
+			case game::Orientation::Up: {
+				_spriteUp->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Down: {
+				_spriteDown->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Left: {
+				_spriteLeft->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Right: {
+				_spriteRight->render(_position, _size, _rotation, _layer);
+				break;
+			}
 		}
 	}
 }
@@ -65,5 +68,12 @@ void Bullet::fire(const glm::vec2 & position, const glm::vec2 & direction)
 		_orientation = _direction.x > 0.0 ? Orientation::Right : Orientation::Left;
 	}
 	_isActive = true;
+	_velocity = _maxVelocity;
+}
+
+void Bullet::onCollision()
+{
+	_isActive = false;
+	_velocity = 0.0F;
 }
 }// namespace game

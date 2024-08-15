@@ -38,6 +38,8 @@ private:
 public:
 	Water(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
 
+	virtual bool colliders(const GameObjectType & gameObjectType) const override;
+
 	virtual void render() const override;
 
 	virtual void update(const double delta) override;
