@@ -1,7 +1,6 @@
 #include "PhysicsEngine.hpp"
 #include "../game/Level.hpp"
 #include "../game/gameobjects/IGameObject.hpp"
-#include <iostream>
 
 namespace physics
 {
@@ -68,7 +67,7 @@ void PhysicsEngine::update(const double delta)
 
 void PhysicsEngine::addDynamicObject(const std::shared_ptr<game::IGameObject> & dynamicObject)
 {
-	_dynamicGameObjects.push_back(dynamicObject);
+	_dynamicGameObjects.insert(dynamicObject);
 }
 
 void PhysicsEngine::currentLevel(const std::shared_ptr<game::Level> & currentLevel)

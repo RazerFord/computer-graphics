@@ -1,5 +1,7 @@
 #include "Tank.hpp"
 #include "../../render/Sprite.hpp"
+#include "../../resources/ResourceManager.hpp"
+#include "Bullet.hpp"
 #include "IGameObject.hpp"
 
 namespace game
@@ -8,8 +10,8 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		   const std::shared_ptr<render::Sprite> & spriteRight,
 		   const std::shared_ptr<render::Sprite> & spriteDown,
 		   const std::shared_ptr<render::Sprite> & spriteLeft,
-		   const std::shared_ptr<render::Sprite> & spriteRespawn,
-		   const std::shared_ptr<render::Sprite> & spriteShield,
+		   const std::shared_ptr<physics::PhysicsEngine> & physicsEngine,
+		   const resources::ResourceManager & manager,
 		   const double maxVelocity,
 		   const glm::vec2 & position,
 		   const glm::vec2 & size,
@@ -20,17 +22,27 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 	, _spriteRight(spriteRight)
 	, _spriteDown(spriteDown)
 	, _spriteLeft(spriteLeft)
-	, _spriteRespawn(spriteRespawn)
-	, _spriteShield(spriteShield)
+	, _spriteRespawn(manager.getSprite("respawn"))
+	, _spriteShield(manager.getSprite("shield"))
 	, _spriteAnimatorUp(spriteUp)
 	, _spriteAnimatorRight(spriteRight)
 	, _spriteAnimatorDown(spriteDown)
 	, _spriteAnimatorLeft(spriteLeft)
-	, _spriteAnimatorRespawn(spriteRespawn)
-	, _spriteAnimatorShield(spriteShield)
+	, _spriteAnimatorRespawn(_spriteRespawn)
+	, _spriteAnimatorShield(_spriteShield)
 	, _maxVelocity(maxVelocity)
 	, _isSpawning(true)
 	, _hasShield(false)
+	, _bullet(std::make_shared<Bullet>(
+		  manager.getSprite("bullet_Top"),
+		  manager.getSprite("bullet_Right"),
+		  manager.getSprite("bullet_Bottom"),
+		  manager.getSprite("bullet_Left"),
+		  0.1,
+		  _position + _size / 4.0F,
+		  _size / 2.0F,
+		  layer))
+	, _physicsEngine(physicsEngine)
 {
 	_respawnTimer.setCallback([this]() {
 		_isSpawning = false;
@@ -79,6 +91,10 @@ void Tank::render() const
 		{
 			_spriteShield->render(_position, _size, _rotation, _layer + 0.1F, _spriteAnimatorShield.getCurrentFrame());
 		}
+	}
+	if (_bullet->isActive())
+	{
+		_bullet->render();
 	}
 }
 
@@ -163,5 +179,14 @@ void Tank::velocity(const double velocity)
 double Tank::maxVelocity() const
 {
 	return _maxVelocity;
+}
+
+void Tank::fire()
+{
+	if (!_bullet->isActive())
+	{
+		_bullet->fire({_position.x + _size.x / 4.0F, _position.y + _size.y / 1.5F}, _direction);
+		_physicsEngine->addDynamicObject(_bullet);
+	}
 }
 }// namespace game

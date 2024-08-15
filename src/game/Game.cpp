@@ -61,6 +61,11 @@ void Game::update(const double delta)
 		_tank->velocity(0.0);
 	}
 
+	if (_keys[GLFW_KEY_SPACE])
+	{
+		_tank->fire();
+	}
+
 	_tank->update(delta);
 
 	_physicsEngine->update(delta);
@@ -86,8 +91,8 @@ bool Game::init()
 		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
 		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
-		_manager->getSprite("respawn"),
-		_manager->getSprite("shield"),
+		_physicsEngine,
+		*_manager,
 		0.05F,
 		_level->getPlayerRespawn1(),
 		glm::vec2(game::BLOCK_SIZE, game::BLOCK_SIZE),

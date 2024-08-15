@@ -2,6 +2,7 @@
 
 #include <glm/vec2.hpp>
 #include <memory>
+#include <unordered_set>
 #include <vector>
 
 namespace game
@@ -20,7 +21,7 @@ struct AABB {
 class PhysicsEngine
 {
 private:
-	std::vector<std::shared_ptr<game::IGameObject>> _dynamicGameObjects;
+	std::unordered_set<std::shared_ptr<game::IGameObject>> _dynamicGameObjects;
 	std::shared_ptr<game::Level> _currentLevel;
 
 public:

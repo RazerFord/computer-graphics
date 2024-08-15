@@ -39,6 +39,8 @@ add_executable(BattleCity
     src/game/gameobjects/Ice.cpp
     src/game/gameobjects/BrickWall.hpp
     src/game/gameobjects/BrickWall.cpp
+    src/game/gameobjects/Bullet.hpp
+    src/game/gameobjects/Bullet.cpp
     src/game/gameobjects/IGameObject.hpp
     src/game/gameobjects/IGameObject.cpp
     src/game/gameobjects/Tank.hpp

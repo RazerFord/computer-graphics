@@ -3,10 +3,21 @@
 #include <glm/vec2.hpp>
 #include <memory>
 
-#include "../../render/SpriteAnimator.hpp"
 #include "IGameObject.hpp"
+#include "Orientation.hpp"
 
+#include "../../render/SpriteAnimator.hpp"
 #include "../../utils/Timer.hpp"
+
+namespace resources
+{
+class ResourceManager;
+}
+
+namespace physics
+{
+class PhysicsEngine;
+}
 
 namespace render
 {
@@ -15,13 +26,7 @@ class Sprite;
 
 namespace game
 {
-enum class Orientation
-{
-	Up,
-	Down,
-	Left,
-	Right,
-};
+class Bullet;
 
 class Tank : public IGameObject
 {
@@ -47,13 +52,16 @@ private:
 	utils::Timer _respawnTimer;
 	utils::Timer _shieldTimer;
 
+	std::shared_ptr<Bullet> _bullet;
+	std::shared_ptr<physics::PhysicsEngine> _physicsEngine;
+
 public:
 	Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		 const std::shared_ptr<render::Sprite> & spriteRight,
 		 const std::shared_ptr<render::Sprite> & spriteDown,
 		 const std::shared_ptr<render::Sprite> & spriteLeft,
-		 const std::shared_ptr<render::Sprite> & spriteRespawn,
-		 const std::shared_ptr<render::Sprite> & spriteShield,
+		 const std::shared_ptr<physics::PhysicsEngine> & physicsEngine,
+		 const resources::ResourceManager & manager,
 		 const double maxVelocity,
 		 const glm::vec2 & position,
 		 const glm::vec2 & size,
@@ -66,5 +74,7 @@ public:
 	void velocity(const double velocity) override;
 
 	double maxVelocity() const;
+
+	void fire();
 };
 }// namespace game
