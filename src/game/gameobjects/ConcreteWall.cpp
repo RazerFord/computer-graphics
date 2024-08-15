@@ -29,42 +29,51 @@ ConcreteWall::ConcreteWall(const ConcreteWallType & type, const resources::Resou
 			_states[static_cast<size_t>(BlockLocation::TopRight)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::BottomLeft)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::BottomRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0), _size});
 			break;
 		}
 		case ConcreteWallType::Top: {
 			_states[static_cast<size_t>(BlockLocation::TopLeft)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::TopRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0, _size.y / 2), _size});
 			break;
 		}
 		case ConcreteWallType::Left: {
 			_states[static_cast<size_t>(BlockLocation::TopLeft)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::BottomLeft)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0), glm::vec2(_size.x / 2, _size.y)});
 			break;
 		}
 		case ConcreteWallType::Right: {
 			_states[static_cast<size_t>(BlockLocation::TopRight)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::BottomRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(_size.x / 2, 0), _size});
 			break;
 		}
 		case ConcreteWallType::Bottom: {
 			_states[static_cast<size_t>(BlockLocation::BottomLeft)] = ConcreteState::Built;
 			_states[static_cast<size_t>(BlockLocation::BottomRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0), glm::vec2(_size.x, _size.y / 2)});
 			break;
 		}
 		case ConcreteWallType::TopLeft: {
 			_states[static_cast<size_t>(BlockLocation::TopLeft)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0, _size.y / 2), glm::vec2(_size.x / 2, _size.y)});
 			break;
 		}
 		case ConcreteWallType::TopRight: {
 			_states[static_cast<size_t>(BlockLocation::TopRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(_size.x / 2, _size.y / 2), _size});
 			break;
 		}
 		case ConcreteWallType::BottomLeft: {
 			_states[static_cast<size_t>(BlockLocation::BottomLeft)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(0), glm::vec2(_size.x / 2, _size.y / 2)});
 			break;
 		}
 		case ConcreteWallType::BottomRight: {
 			_states[static_cast<size_t>(BlockLocation::BottomRight)] = ConcreteState::Built;
+			_colliders.push_back({glm::vec2(_size.x / 2, 0), glm::vec2(_size.x, _size.y / 2)});
 			break;
 		}
 	}

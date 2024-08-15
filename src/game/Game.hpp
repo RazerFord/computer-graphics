@@ -25,12 +25,12 @@ private:
 	std::shared_ptr<resources::ResourceManager> _manager;
 	std::shared_ptr<physics::PhysicsEngine> _physicsEngine;
 	glm::ivec2 _glfwWindowSize;
-	std::array<bool, 350> _keys;
 	enum class GameState
 	{
 		Active,
 		Pause,
 	} _currentGameState;
+	std::array<bool, 350> _keys;
 
 	std::shared_ptr<Tank> _tank;
 	std::shared_ptr<Level> _level;

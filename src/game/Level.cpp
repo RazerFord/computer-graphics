@@ -232,6 +232,23 @@ std::vector<std::shared_ptr<IGameObject>> Level::objectsInArea(const glm::vec2 &
 		}
 	}
 
+	if (endX >= _width)
+	{
+		objects.emplace_back(_gameObjects[_gameObjects.size() - 1]);
+	}
+	if (startX < 1)
+	{
+		objects.emplace_back(_gameObjects[_gameObjects.size() - 2]);
+	}
+	if (startY < 1)
+	{
+		objects.emplace_back(_gameObjects[_gameObjects.size() - 3]);
+	}
+	if (endY >= _height)
+	{
+		objects.emplace_back(_gameObjects[_gameObjects.size() - 4]);
+	}
+
 	return objects;
 }
 }// namespace game

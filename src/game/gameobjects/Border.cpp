@@ -8,7 +8,9 @@ namespace game
 Border::Border(const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer)
 	: IGameObject(position, size, rotation, layer)
 	, _sprite{manager.getSprite("border")}
-{}
+{
+	_colliders.push_back({glm::vec2(0), _size});
+}
 
 void Border::render() const
 {

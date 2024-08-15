@@ -27,27 +27,40 @@ void PhysicsEngine::update(const double delta)
 	{
 		if (object->velocity() > 0.0)
 		{
-			const auto p = object->position();
 			const auto d = object->direction();
-			const auto v = object->velocity();
-			const auto np = glm::vec2{p.x + delta * v * d.x, p.y + delta * v * d.y};
-
-			const auto & colliders = object->colliders();
-			auto objects = _currentLevel->objectsInArea(np, np + object->size());
-
-			bool hasCollision = false;
-			for (const auto & o: objects)
 			{
-				if (hasIntersection(np, colliders, o->position(), o->colliders()))
+				const auto p = object->position();
+				if (d.x != 0)
 				{
-					hasCollision = true;
-					break;
+					object->position({p.x, (static_cast<int>(p.y / 4.0 + 0.5) * 4.0)});
+				}
+				else if (d.y != 0)
+				{
+					object->position({(static_cast<int>(p.x / 4.0 + 0.5) * 4.0), p.y});
 				}
 			}
-
-			if (!hasCollision)
 			{
-				object->position(np);
+				const auto p = object->position();
+				const auto v = object->velocity();
+				const auto np = glm::vec2{p.x + delta * v * d.x, p.y + delta * v * d.y};
+
+				const auto & colliders = object->colliders();
+				auto objects = _currentLevel->objectsInArea(np, np + object->size());
+
+				bool hasCollision = false;
+				for (const auto & o: objects)
+				{
+					if (hasIntersection(np, colliders, o->position(), o->colliders()))
+					{
+						hasCollision = true;
+						break;
+					}
+				}
+
+				if (!hasCollision)
+				{
+					object->position(np);
+				}
 			}
 		}
 	}

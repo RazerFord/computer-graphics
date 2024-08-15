@@ -15,7 +15,9 @@ Water::Water(const resources::ResourceManager & manager, const glm::vec2 & posit
 		  glm::vec2(0.0F, 0.0F),
 		  glm::vec2(_size.x / 2.0F, 0.0F),
 	  }
-{}
+{
+	_colliders.push_back({glm::vec2(0), _size});
+}
 
 void Water::render() const
 {

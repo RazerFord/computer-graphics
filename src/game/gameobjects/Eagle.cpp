@@ -12,7 +12,9 @@ Eagle::Eagle(const resources::ResourceManager & manager, const glm::vec2 & posit
 		  manager.getSprite("eagle_dead"),
 	  }
 	, _currentState(EagleState::Alive)
-{}
+{
+	_colliders.push_back({glm::vec2(0), _size});
+}
 
 void Eagle::render() const
 {
