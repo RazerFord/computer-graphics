@@ -44,19 +44,19 @@ void Bullet::render() const
 			switch (_orientation)
 			{
 				case game::Orientation::Up: {
-					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer);
+					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
 					break;
 				}
 				case game::Orientation::Down: {
-					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer);
+					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
 					break;
 				}
 				case game::Orientation::Left: {
-					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer);
+					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
 					break;
 				}
 				case game::Orientation::Right: {
-					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer);
+					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
 					break;
 				}
 			}
