@@ -38,9 +38,11 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		  manager.getSprite("bullet_Right"),
 		  manager.getSprite("bullet_Bottom"),
 		  manager.getSprite("bullet_Left"),
+		  manager.getSprite("explosion"),
 		  0.1,
 		  _position + _size / 4.0F,
 		  _size / 2.0F,
+		  _size,
 		  layer))
 	, _physicsEngine(physicsEngine)
 {
@@ -101,6 +103,11 @@ void Tank::render() const
 
 void Tank::update(const double delta)
 {
+	if (_bullet->isActive())
+	{
+		_bullet->update(delta);
+	}
+
 	if (_isSpawning)
 	{
 		_spriteAnimatorRespawn.update(delta);
@@ -184,7 +191,7 @@ double Tank::maxVelocity() const
 
 void Tank::fire()
 {
-	if (!_bullet->isActive())
+	if (!_bullet->isActive() && !_isSpawning)
 	{
 		_bullet->fire(_position + _size / 4.0F + _size * _direction / 4.0F, _direction);
 	}
