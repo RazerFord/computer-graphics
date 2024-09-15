@@ -1,9 +1,9 @@
 #pragma once
 
+#include <functional>
 #include <glm/vec2.hpp>
 #include <memory>
 #include <unordered_set>
-#include <vector>
 
 namespace game
 {
@@ -13,9 +13,35 @@ class Level;
 
 namespace physics
 {
+enum class CollisionDirection
+{
+	Up,
+	Down,
+	Left,
+	Right,
+};
+
 struct AABB {
 	glm::vec2 bottomLeft;
 	glm::vec2 topRight;
+};
+
+struct Collider {
+	AABB boundBox;
+	bool isActive;
+	std::function<void(const game::IGameObject &, const CollisionDirection &)> onCollisionCallback;
+
+	Collider(const glm::vec2 & bottomLeft, const glm::vec2 & topRight, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback)
+		: boundBox{bottomLeft, topRight}
+		, isActive(true)
+		, onCollisionCallback(onCollisionCallback)
+	{}
+
+	Collider(const AABB & boundBox, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback)
+		: boundBox(boundBox)
+		, isActive(true)
+		, onCollisionCallback(onCollisionCallback)
+	{}
 };
 
 class PhysicsEngine
@@ -38,6 +64,6 @@ public:
 	void currentLevel(const std::shared_ptr<game::Level> & currentLevel);
 
 private:
-	bool hasIntersection(const glm::vec2 & position1, const std::vector<AABB> & colliders1, const glm::vec2 & position2, const std::vector<AABB> & colliders2);
+	bool hasIntersection(const glm::vec2 & position1, const Collider & collider1, const glm::vec2 & position2, const Collider & collider2);
 };
 }// namespace physics

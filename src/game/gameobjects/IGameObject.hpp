@@ -30,7 +30,7 @@ protected:
 	float _layer;
 	glm::vec2 _direction;
 	double _velocity;
-	std::vector<physics::AABB> _colliders;
+	std::vector<physics::Collider> _colliders;
 
 public:
 	IGameObject(const GameObjectType & gameObjectType, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
@@ -39,7 +39,7 @@ public:
 	const glm::vec2 & size() const;
 	const glm::vec2 & direction() const;
 	double velocity() const;
-	const std::vector<physics::AABB> colliders() const;
+	const std::vector<physics::Collider> & colliders() const;
 	GameObjectType gameObjectType() const;
 
 	virtual void position(const glm::vec2 & position);

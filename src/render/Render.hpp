@@ -3,7 +3,6 @@
 #include "IndexBuffer.hpp"
 #include "ShaderProgram.hpp"
 #include "VertexArray.hpp"
-#include <GL/gl.h>
 
 namespace render
 {

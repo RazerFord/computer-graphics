@@ -28,59 +28,64 @@ Bullet::Bullet(const std::shared_ptr<render::Sprite> & spriteUp,
 	, _spriteAnimatorExplosion(spriteExplosion)
 	, _isExplosion(false)
 {
-	_colliders.push_back({glm::vec2(0), _size});
+	auto onCollision = [this](const game::IGameObject &, const physics::CollisionDirection &) -> void {
+		_velocity = 0.0F;
+		_isExplosion = true;
+		_timerExplosion.start(_spriteAnimatorExplosion.getTotalDuration());
+	};
+
+	_colliders.emplace_back(glm::vec2(0), _size, onCollision);
+
 	_timerExplosion.setCallback([this]() {
 		_isExplosion = false;
 		_isActive = false;
+		_spriteAnimatorExplosion.reset();
 	});
 }
 
 void Bullet::render() const
 {
-	if (_isActive)
+	if (_isExplosion)
 	{
-		if (_isExplosion)
+		switch (_orientation)
 		{
-			switch (_orientation)
-			{
-				case game::Orientation::Up: {
-					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
-					break;
-				}
-				case game::Orientation::Down: {
-					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
-					break;
-				}
-				case game::Orientation::Left: {
-					_spriteExplosion->render(_position - _explosionOffset - glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
-					break;
-				}
-				case game::Orientation::Right: {
-					_spriteExplosion->render(_position - _explosionOffset + glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
-					break;
-				}
+			case game::Orientation::Up: {
+				_spriteExplosion->render(_position - _explosionOffset + glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
+				break;
+			}
+			case game::Orientation::Down: {
+				_spriteExplosion->render(_position - _explosionOffset - glm::vec2(0.0F, _size.y / 2.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
+				break;
+			}
+			case game::Orientation::Left: {
+				_spriteExplosion->render(_position - _explosionOffset - glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
+				break;
+			}
+			case game::Orientation::Right: {
+				_spriteExplosion->render(_position - _explosionOffset + glm::vec2(_size.x / 2.0F, 0.0F), _explosionSize, _rotation, _layer, _spriteAnimatorExplosion.getCurrentFrame());
+				break;
 			}
 		}
-		else
+	}
+	else if (_isActive)
+	{
+		switch (_orientation)
 		{
-			switch (_orientation)
-			{
-				case game::Orientation::Up: {
-					_spriteUp->render(_position, _size, _rotation, _layer);
-					break;
-				}
-				case game::Orientation::Down: {
-					_spriteDown->render(_position, _size, _rotation, _layer);
-					break;
-				}
-				case game::Orientation::Left: {
-					_spriteLeft->render(_position, _size, _rotation, _layer);
-					break;
-				}
-				case game::Orientation::Right: {
-					_spriteRight->render(_position, _size, _rotation, _layer);
-					break;
-				}
+			case game::Orientation::Up: {
+				_spriteUp->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Down: {
+				_spriteDown->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Left: {
+				_spriteLeft->render(_position, _size, _rotation, _layer);
+				break;
+			}
+			case game::Orientation::Right: {
+				_spriteRight->render(_position, _size, _rotation, _layer);
+				break;
 			}
 		}
 	}
@@ -114,13 +119,5 @@ void Bullet::fire(const glm::vec2 & position, const glm::vec2 & direction)
 	}
 	_isActive = true;
 	_velocity = _maxVelocity;
-}
-
-void Bullet::onCollision()
-{
-	_velocity = 0.0F;
-	_isExplosion = true;
-	_spriteAnimatorExplosion.reset();
-	_timerExplosion.start(_spriteAnimatorExplosion.getTotalDuration());
 }
 }// namespace game

@@ -32,7 +32,7 @@ double IGameObject::velocity() const
 	return _velocity;
 }
 
-const std::vector<physics::AABB> IGameObject::colliders() const
+const std::vector<physics::Collider> & IGameObject::colliders() const
 {
 	return _colliders;
 }

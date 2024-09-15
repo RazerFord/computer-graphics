@@ -51,7 +51,5 @@ public:
 	bool isActive() const;
 
 	void fire(const glm::vec2 & position, const glm::vec2 & direction);
-
-	virtual void onCollision() override;
 };
 }// namespace game

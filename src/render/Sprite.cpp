@@ -1,5 +1,4 @@
 #include "Sprite.hpp"
-
 #include "IndexBuffer.hpp"
 #include "Render.hpp"
 #include "ShaderProgram.hpp"

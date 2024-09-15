@@ -4,6 +4,28 @@
 
 namespace physics
 {
+inline CollisionDirection toDirection(const glm::vec2 & directionVec)
+{
+	CollisionDirection direction;
+	if (directionVec.x > 0.0F)
+	{
+		direction = CollisionDirection::Right;
+	}
+	else if (directionVec.x < 0.0F)
+	{
+		direction = CollisionDirection::Left;
+	}
+	else if (directionVec.y > 0.0F)
+	{
+		direction = CollisionDirection::Up;
+	}
+	else if (directionVec.y < 0.0F)
+	{
+		direction = CollisionDirection::Down;
+	}
+	return direction;
+}
+
 PhysicsEngine::PhysicsEngine(PhysicsEngine && physicsEngine)
 	: _dynamicGameObjects(std::move(physicsEngine._dynamicGameObjects))
 {}
@@ -46,24 +68,39 @@ void PhysicsEngine::update(const double delta)
 				const auto & colliders = object->colliders();
 				auto objects = _currentLevel->objectsInArea(np, np + object->size());
 
+				CollisionDirection objectDirection = toDirection(object->direction());
+				CollisionDirection oppositeDirection = toDirection(-object->direction());
+
 				bool hasCollision = false;
-				for (const auto & o: objects)
+				for (const auto & objectCollider: colliders)
 				{
-					if (o->colliders(object->gameObjectType()) && hasIntersection(np, colliders, o->position(), o->colliders()))
+					for (const auto & o: objects)
 					{
-						hasCollision = true;
-						o->onCollision();
-						break;
+						const auto & oColliders = o->colliders();
+						if (o->colliders(object->gameObjectType()) && !oColliders.empty())
+						{
+							for (const auto & oCollider: oColliders)
+							{
+								if (oCollider.isActive && hasIntersection(np, objectCollider, o->position(), oCollider))
+								{
+									hasCollision = true;
+									if (oCollider.onCollisionCallback)
+									{
+										oCollider.onCollisionCallback(*object, objectDirection);
+									}
+									if (objectCollider.onCollisionCallback)
+									{
+										objectCollider.onCollisionCallback(*o, oppositeDirection);
+									}
+								}
+							}
+						}
 					}
 				}
 
 				if (hasCollision)
 				{
 					object->onCollision();
-				}
-				else
-				{
-					object->position(np);
 				}
 			}
 		}
@@ -80,25 +117,36 @@ void PhysicsEngine::currentLevel(const std::shared_ptr<game::Level> & currentLev
 	_currentLevel = currentLevel;
 }
 
-bool PhysicsEngine::hasIntersection(const glm::vec2 & position1, const std::vector<AABB> & colliders1, const glm::vec2 & position2, const std::vector<AABB> & colliders2)
+bool PhysicsEngine::hasIntersection(const glm::vec2 & position1, const Collider & collider1, const glm::vec2 & position2, const Collider & collider2)
 {
-	for (const auto & collider1: colliders1)
-	{
-		const auto bottomLeft1 = position1 + collider1.bottomLeft;
-		const auto topRight1 = position1 + collider1.topRight;
-		for (const auto & collider2: colliders2)
-		{
-			const auto bottomLeft2 = position2 + collider2.bottomLeft;
-			const auto topRight2 = position2 + collider2.topRight;
+	const auto bottomLeft1 = position1 + collider1.boundBox.bottomLeft;
+	const auto topRight1 = position1 + collider1.boundBox.topRight;
+	const auto bottomLeft2 = position2 + collider2.boundBox.bottomLeft;
+	const auto topRight2 = position2 + collider2.boundBox.topRight;
 
-			if (std::max(bottomLeft1.x, bottomLeft2.x) < std::min(topRight1.x, topRight2.x)
-				&& std::max(bottomLeft1.y, bottomLeft2.y) < std::min(topRight1.y, topRight2.y))
-			{
-				return true;
-			}
-		}
+	if (std::max(bottomLeft1.x, bottomLeft2.x) < std::min(topRight1.x, topRight2.x)
+		&& std::max(bottomLeft1.y, bottomLeft2.y) < std::min(topRight1.y, topRight2.y))
+	{
+		return true;
 	}
+
 	return false;
 }
 
+bool hasIntersection(const glm::vec2 & position1, const Collider & collider1, const glm::vec2 & position2, const Collider & collider2)
+{
+	const glm::vec2 bottomLeft1 = collider1.boundBox.bottomLeft + position1;
+	const glm::vec2 topRight1 = collider1.boundBox.topRight + position1;
+
+	const glm::vec2 bottomLeft2 = collider2.boundBox.bottomLeft + position1;
+	const glm::vec2 topRight2 = collider2.boundBox.topRight + position1;
+
+	if (std::max(bottomLeft1.x, bottomLeft2.x) < std::min(topRight1.x, topRight2.x)
+		&& std::max(bottomLeft1.y, bottomLeft2.y) < std::min(topRight1.y, topRight2.y))
+	{
+		return true;
+	}
+
+	return false;
+}
 }// namespace physics

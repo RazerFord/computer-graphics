@@ -62,6 +62,7 @@ public:
 	};
 
 private:
+	std::array<physics::Collider *, 4> _brickLocationToColliderMap;
 	std::array<std::shared_ptr<render::Sprite>, 15> _sprites;
 	std::array<BrickState, 4> _states;
 	const std::array<glm::vec2, 4> _offsets;
@@ -70,9 +71,12 @@ public:
 	BrickWall(const BrickWallType & type, const resources::ResourceManager & manager, const glm::vec2 & position, const glm::vec2 & size, const float rotation, const float layer);
 
 	virtual void render() const override;
-	virtual void update(const double delta) override;
 
 private:
 	void renderBrick(const BrickLocation & location) const;
+	void onCollisionCallback(const BrickLocation & brickLocation, const IGameObject & gameObject, const physics::CollisionDirection & collisionDirection);
+
+	static BrickState getBrickStateAfterCollision(const BrickState & brickState, const physics::CollisionDirection & collisionDirection);
+	static physics::AABB getAABBForBrickState(const BrickLocation & location, const BrickState & brickState, const glm::vec2 & size);
 };
 }// namespace game

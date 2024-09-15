@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 namespace render
 {
 class Sprite;
