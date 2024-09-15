@@ -31,13 +31,13 @@ struct Collider {
 	bool isActive;
 	std::function<void(const game::IGameObject &, const CollisionDirection &)> onCollisionCallback;
 
-	Collider(const glm::vec2 & bottomLeft, const glm::vec2 & topRight, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback)
+	Collider(const glm::vec2 & bottomLeft, const glm::vec2 & topRight, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback = {})
 		: boundBox{bottomLeft, topRight}
 		, isActive(true)
 		, onCollisionCallback(onCollisionCallback)
 	{}
 
-	Collider(const AABB & boundBox, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback)
+	Collider(const AABB & boundBox, const std::function<void(const game::IGameObject &, const CollisionDirection &)> & onCollisionCallback = {})
 		: boundBox(boundBox)
 		, isActive(true)
 		, onCollisionCallback(onCollisionCallback)

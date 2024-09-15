@@ -86,11 +86,11 @@ void PhysicsEngine::update(const double delta)
 									hasCollision = true;
 									if (oCollider.onCollisionCallback)
 									{
-										oCollider.onCollisionCallback(*object, objectDirection);
+										oCollider.onCollisionCallback(*object, oppositeDirection);
 									}
 									if (objectCollider.onCollisionCallback)
 									{
-										objectCollider.onCollisionCallback(*o, oppositeDirection);
+										objectCollider.onCollisionCallback(*o, objectDirection);
 									}
 								}
 							}
@@ -98,9 +98,9 @@ void PhysicsEngine::update(const double delta)
 					}
 				}
 
-				if (hasCollision)
+				if (!hasCollision)
 				{
-					object->onCollision();
+					object->position(np);
 				}
 			}
 		}
