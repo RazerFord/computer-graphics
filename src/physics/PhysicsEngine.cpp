@@ -1,6 +1,6 @@
 #include "PhysicsEngine.hpp"
-#include "../game/gamestates/Level.hpp"
 #include "../game/gameobjects/IGameObject.hpp"
+#include "../game/gamestates/Level.hpp"
 
 namespace physics
 {
@@ -115,6 +115,8 @@ void PhysicsEngine::addDynamicObject(const std::shared_ptr<game::IGameObject> & 
 void PhysicsEngine::currentLevel(const std::shared_ptr<game::Level> & currentLevel)
 {
 	_currentLevel = currentLevel;
+	_dynamicGameObjects.clear();
+	_currentLevel->initPhysics();
 }
 
 bool PhysicsEngine::hasIntersection(const glm::vec2 & position1, const Collider & collider1, const glm::vec2 & position2, const Collider & collider2)

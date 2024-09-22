@@ -15,33 +15,18 @@
 #include <iostream>
 #include <memory>
 
+static constexpr unsigned int SCALE = 3;
+static constexpr unsigned int BLOCK_SIZE = 16;
+
 std::shared_ptr<game::Game> gameApp;
-glm::ivec2 glfwWindowSize(16 * 16, 15 * 16);
-// glm::ivec2 glfwWindowSize(640, 480);
+glm::ivec2 glfwWindowSize(SCALE * 16 * BLOCK_SIZE, SCALE * 15 * BLOCK_SIZE);
 
 void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 {
 	glfwWindowSize.x = width;
 	glfwWindowSize.y = height;
 
-	const float aspectRation = static_cast<float>(gameApp->getCurrentWidth()) / gameApp->getCurrentHeight();
-	int viewportWidth = width;
-	int viewportHeight = height;
-	int leftOffset = 0;
-	int bottomOffset = 0;
-
-	if (static_cast<float>(glfwWindowSize.x) / glfwWindowSize.y > aspectRation)
-	{
-		viewportWidth = glfwWindowSize.y * aspectRation;
-		leftOffset = (glfwWindowSize.x - viewportWidth) / 2;
-	}
-	else if (static_cast<float>(glfwWindowSize.x) / glfwWindowSize.y < aspectRation)
-	{
-		viewportHeight = glfwWindowSize.x / aspectRation;
-		bottomOffset = (glfwWindowSize.y - viewportHeight) / 2;
-	}
-
-	render::Render::setViewport(viewportWidth, viewportHeight, leftOffset, bottomOffset);
+	gameApp->setWindowSize(glfwWindowSize);
 }
 
 void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int mode)
@@ -97,7 +82,7 @@ int main(int _, char ** argv)
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
 		auto physicsEngine = std::make_shared<physics::PhysicsEngine>();
 		gameApp = std::make_shared<game::Game>(manager, physicsEngine, glfwWindowSize);
-		glfwSetWindowSize(window, 3 * gameApp->getCurrentWidth(), 3 * gameApp->getCurrentHeight());
+		// glfwSetWindowSize(window, 3 * gameApp->getCurrentWidth(), 3 * gameApp->getCurrentHeight());
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 

@@ -1,8 +1,14 @@
 #pragma once
 
 #include <array>
+#include <glm/ext/vector_float2.hpp>
 #include <glm/glm.hpp>
 #include <memory>
+
+namespace render
+{
+class ShaderProgram;
+}
 
 namespace resources
 {
@@ -16,9 +22,7 @@ class PhysicsEngine;
 
 namespace game
 {
-class Tank;
-class Level;
-class StartScreen;
+class IGameState;
 
 class Game
 {
@@ -37,10 +41,8 @@ private:
 	} _currentGameState;
 	std::array<bool, 350> _keys;
 
-	std::shared_ptr<Tank> _tank;
-	std::shared_ptr<Level> _level;
-
-	std::shared_ptr<game::StartScreen> _startScreen;
+	std::shared_ptr<IGameState> _gameState;
+	std::shared_ptr<render::ShaderProgram> _program;
 
 public:
 	Game(const std::shared_ptr<resources::ResourceManager> & manager, const std::shared_ptr<physics::PhysicsEngine> & _physicsEngine, const glm::ivec2 glfwWindowSize);
@@ -54,5 +56,8 @@ public:
 
 	size_t getCurrentWidth() const;
 	size_t getCurrentHeight() const;
+	void startNewLevel(const size_t level);
+	void setWindowSize(const glm::vec2 & windowSize);
+	void updateViewport();
 };
 }// namespace game

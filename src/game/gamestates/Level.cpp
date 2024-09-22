@@ -6,8 +6,10 @@
 #include "../gameobjects/Eagle.hpp"
 #include "../gameobjects/IGameObject.hpp"
 #include "../gameobjects/Ice.hpp"
+#include "../gameobjects/Tank.hpp"
 #include "../gameobjects/Trees.hpp"
 #include "../gameobjects/Water.hpp"
+#include "GLFW/glfw3.h"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -87,8 +89,14 @@ std::shared_ptr<IGameObject> makeGameObjectFromDescriptor(const resources::Resou
 	}
 }
 
-Level::Level(const std::vector<std::string> & description, const resources::ResourceManager & manager)
+Level::Level(
+	const std::vector<std::string> & description,
+	const std::shared_ptr<resources::ResourceManager> & manager,
+	const std::shared_ptr<physics::PhysicsEngine> & physicsEngine)
 {
+	_manager = manager;
+	_physicsEngine = physicsEngine;
+
 	if (description.empty())
 	{
 		std::cerr << "empty level description" << std::endl;
@@ -130,7 +138,7 @@ Level::Level(const std::vector<std::string> & description, const resources::Reso
 					_enemyRespawn3 = {currentLeftOffset, currentBottomOffset};
 				}
 				default: {
-					_gameObjects.emplace_back(makeGameObjectFromDescriptor(manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
+					_gameObjects.emplace_back(makeGameObjectFromDescriptor(*manager, currentElement, {currentLeftOffset, currentBottomOffset}, {BLOCK_SIZE, BLOCK_SIZE}, 0.0F));
 				}
 			}
 			currentLeftOffset += BLOCK_SIZE;
@@ -139,13 +147,13 @@ Level::Level(const std::vector<std::string> & description, const resources::Reso
 	}
 
 	// border bottom
-	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{BLOCK_SIZE, 0.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
+	_gameObjects.emplace_back(std::make_shared<game::Border>(*_manager, glm::vec2{BLOCK_SIZE, 0.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
 	// border top
-	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{BLOCK_SIZE, _height * BLOCK_SIZE + BLOCK_SIZE / 2.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
+	_gameObjects.emplace_back(std::make_shared<game::Border>(*_manager, glm::vec2{BLOCK_SIZE, _height * BLOCK_SIZE + BLOCK_SIZE / 2.0F}, glm::vec2{_width * BLOCK_SIZE, BLOCK_SIZE / 2.0F}, 0.0F, 0.0F));
 	// border left
-	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{0.0F, 0.0F}, glm::vec2{BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
+	_gameObjects.emplace_back(std::make_shared<game::Border>(*_manager, glm::vec2{0.0F, 0.0F}, glm::vec2{BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
 	// border right
-	_gameObjects.emplace_back(std::make_shared<game::Border>(manager, glm::vec2{(_width + 1) * BLOCK_SIZE, 0.0F}, glm::vec2{2 * BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
+	_gameObjects.emplace_back(std::make_shared<game::Border>(*_manager, glm::vec2{(_width + 1) * BLOCK_SIZE, 0.0F}, glm::vec2{2 * BLOCK_SIZE, (_height + 1) * BLOCK_SIZE}, 0.0F, 0.0F));
 }
 
 void Level::render() const
@@ -157,6 +165,8 @@ void Level::render() const
 			gameObject->render();
 		}
 	}
+
+	_tank->render();
 }
 
 void Level::update(const double delta)
@@ -168,6 +178,8 @@ void Level::update(const double delta)
 			gameObject->update(delta);
 		}
 	}
+
+	_tank->update(delta);
 }
 
 int Level::getStateWidth() const
@@ -178,6 +190,39 @@ int Level::getStateWidth() const
 int Level::getStateHeight() const
 {
 	return (_height + 1) * BLOCK_SIZE;
+}
+
+void Level::processInput(const std::array<bool, 350> & keys)
+{
+	if (keys[GLFW_KEY_W])
+	{
+		_tank->setOrientation(Orientation::Up);
+		_tank->velocity(_tank->maxVelocity());
+	}
+	else if (keys[GLFW_KEY_A])
+	{
+		_tank->setOrientation(Orientation::Left);
+		_tank->velocity(_tank->maxVelocity());
+	}
+	else if (keys[GLFW_KEY_D])
+	{
+		_tank->setOrientation(Orientation::Right);
+		_tank->velocity(_tank->maxVelocity());
+	}
+	else if (keys[GLFW_KEY_S])
+	{
+		_tank->setOrientation(Orientation::Down);
+		_tank->velocity(_tank->maxVelocity());
+	}
+	else
+	{
+		_tank->velocity(0.0);
+	}
+
+	if (keys[GLFW_KEY_SPACE])
+	{
+		_tank->fire();
+	}
 }
 
 const glm::ivec2 Level::getPlayerRespawn1() const
@@ -204,6 +249,24 @@ const glm::ivec2 Level::getEnemyRespawn3() const
 {
 	return _enemyRespawn3;
 }
+
+void Level::initPhysics()
+{
+	_tank = std::make_shared<game::Tank>(
+		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
+		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
+		_physicsEngine,
+		*_manager,
+		0.05F,
+		getPlayerRespawn1(),
+		glm::vec2(game::BLOCK_SIZE, game::BLOCK_SIZE),
+		0.0F);
+
+	_physicsEngine->addDynamicObject(_tank);
+}
+
 
 std::vector<std::shared_ptr<IGameObject>> Level::objectsInArea(const glm::vec2 & bottomLeft, const glm::vec2 & topRight) const
 {

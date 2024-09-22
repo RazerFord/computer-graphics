@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameState.hpp"
+#include "IGameState.hpp"
 #include <vector>
 #include <string>
 #include <memory>
@@ -18,7 +18,7 @@ class Sprite;
 
 namespace game
 {
-class StartScreen : public GameState
+class StartScreen : public IGameState
 {
 private:
 	std::vector<std::pair<std::shared_ptr<render::Sprite>, glm::vec2>> _sprites;

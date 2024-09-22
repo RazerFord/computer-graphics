@@ -51,7 +51,7 @@ add_executable(BattleCity
     src/utils/Timer.cpp
     src/physics/PhysicsEngine.hpp
     src/physics/PhysicsEngine.cpp
-    src/game/gamestates/GameState.hpp
+    src/game/gamestates/IGameState.hpp
     src/game/gamestates/StartScreen.hpp
     src/game/gamestates/StartScreen.cpp
     src/game/gamestates/Level.hpp
