@@ -1,13 +1,13 @@
 #include "Level.hpp"
-#include "../resources/ResourceManager.hpp"
-#include "gameobjects/Border.hpp"
-#include "gameobjects/BrickWall.hpp"
-#include "gameobjects/ConcreteWall.hpp"
-#include "gameobjects/Eagle.hpp"
-#include "gameobjects/IGameObject.hpp"
-#include "gameobjects/Ice.hpp"
-#include "gameobjects/Trees.hpp"
-#include "gameobjects/Water.hpp"
+#include "../../resources/ResourceManager.hpp"
+#include "../gameobjects/Border.hpp"
+#include "../gameobjects/BrickWall.hpp"
+#include "../gameobjects/ConcreteWall.hpp"
+#include "../gameobjects/Eagle.hpp"
+#include "../gameobjects/IGameObject.hpp"
+#include "../gameobjects/Ice.hpp"
+#include "../gameobjects/Trees.hpp"
+#include "../gameobjects/Water.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -170,12 +170,12 @@ void Level::update(const double delta)
 	}
 }
 
-size_t Level::getLevelWidth() const
+int Level::getStateWidth() const
 {
 	return (_width + 3) * BLOCK_SIZE;
 }
 
-size_t Level::getLevelHeight() const
+int Level::getStateHeight() const
 {
 	return (_height + 1) * BLOCK_SIZE;
 }

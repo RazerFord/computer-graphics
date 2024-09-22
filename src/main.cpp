@@ -24,7 +24,7 @@ void glfwWindowResizeCallback(GLFWwindow * window, int width, int height)
 	glfwWindowSize.x = width;
 	glfwWindowSize.y = height;
 
-	const float aspectRation = static_cast<float>(gameApp->getCurrentLevelWidth()) / gameApp->getCurrentLevelHeight();
+	const float aspectRation = static_cast<float>(gameApp->getCurrentWidth()) / gameApp->getCurrentHeight();
 	int viewportWidth = width;
 	int viewportHeight = height;
 	int leftOffset = 0;
@@ -97,7 +97,7 @@ int main(int _, char ** argv)
 		auto manager = std::make_shared<resources::ResourceManager>(argv[0]);
 		auto physicsEngine = std::make_shared<physics::PhysicsEngine>();
 		gameApp = std::make_shared<game::Game>(manager, physicsEngine, glfwWindowSize);
-		glfwSetWindowSize(window, 3 * gameApp->getCurrentLevelWidth(), 3 * gameApp->getCurrentLevelHeight());
+		glfwSetWindowSize(window, 3 * gameApp->getCurrentWidth(), 3 * gameApp->getCurrentHeight());
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 

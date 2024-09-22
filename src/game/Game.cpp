@@ -2,13 +2,15 @@
 #include "../physics/PhysicsEngine.hpp"
 #include "../render/ShaderProgram.hpp"
 #include "../resources/ResourceManager.hpp"
-#include "Level.hpp"
 #include "gameobjects/Tank.hpp"
+#include "gamestates/Level.hpp"
+#include "gamestates/StartScreen.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/glm.hpp>
 #include <memory>
+#include <stdexcept>
 
 namespace game
 {
@@ -17,7 +19,7 @@ Game::Game(const std::shared_ptr<resources::ResourceManager> & manager, const st
 	: _manager(manager)
 	, _physicsEngine(physicsEngine)
 	, _glfwWindowSize(glfwWindowSize)
-	, _currentGameState(GameState::Active)
+	, _currentGameState(GameState::StartScreen)
 {
 	_keys.fill(false);
 	init();
@@ -27,48 +29,95 @@ Game::~Game() {}
 
 void Game::render()
 {
-	_manager->getShader("spriteShader")->use();
-	_tank->render();
-	_level->render();
+	// _manager->getShader("spriteShader")->use();
+	switch (_currentGameState)
+	{
+		case GameState::StartScreen: {
+			if (_startScreen)
+			{
+				_startScreen->render();
+			}
+			break;
+		}
+
+		case GameState::Level: {
+			if (_tank)
+			{
+				_tank->render();
+			}
+			if (_level)
+			{
+				_level->render();
+			}
+			break;
+		}
+
+		default: {
+			throw std::runtime_error("non implemented case in render");
+		}
+	}
 }
 
 void Game::update(const double delta)
 {
-	_level->update(delta);
+	switch (_currentGameState)
+	{
+		case GameState::StartScreen: {
+			if (_keys[GLFW_KEY_ENTER])
+			{
+				_currentGameState = GameState::Level;
+			}
+			break;
+		}
 
-	if (_keys[GLFW_KEY_W])
-	{
-		_tank->setOrientation(Orientation::Up);
-		_tank->velocity(_tank->maxVelocity());
-	}
-	else if (_keys[GLFW_KEY_A])
-	{
-		_tank->setOrientation(Orientation::Left);
-		_tank->velocity(_tank->maxVelocity());
-	}
-	else if (_keys[GLFW_KEY_D])
-	{
-		_tank->setOrientation(Orientation::Right);
-		_tank->velocity(_tank->maxVelocity());
-	}
-	else if (_keys[GLFW_KEY_S])
-	{
-		_tank->setOrientation(Orientation::Down);
-		_tank->velocity(_tank->maxVelocity());
-	}
-	else
-	{
-		_tank->velocity(0.0);
-	}
+		case GameState::Level: {
+			if (_level)
+			{
+				_level->update(delta);
+			}
 
-	if (_keys[GLFW_KEY_SPACE])
-	{
-		_tank->fire();
+			if (_tank)
+			{
+				if (_keys[GLFW_KEY_W])
+				{
+					_tank->setOrientation(Orientation::Up);
+					_tank->velocity(_tank->maxVelocity());
+				}
+				else if (_keys[GLFW_KEY_A])
+				{
+					_tank->setOrientation(Orientation::Left);
+					_tank->velocity(_tank->maxVelocity());
+				}
+				else if (_keys[GLFW_KEY_D])
+				{
+					_tank->setOrientation(Orientation::Right);
+					_tank->velocity(_tank->maxVelocity());
+				}
+				else if (_keys[GLFW_KEY_S])
+				{
+					_tank->setOrientation(Orientation::Down);
+					_tank->velocity(_tank->maxVelocity());
+				}
+				else
+				{
+					_tank->velocity(0.0);
+				}
+
+				if (_keys[GLFW_KEY_SPACE])
+				{
+					_tank->fire();
+				}
+
+				_tank->update(delta);
+			}
+			_physicsEngine->update(delta);
+			break;
+		}
+
+		default: {
+			throw std::runtime_error("non implemented case in update");
+		}
 	}
-
-	_tank->update(delta);
-
-	_physicsEngine->update(delta);
 }
 
 void Game::setKey(const int key, const int action)
@@ -82,6 +131,7 @@ bool Game::init()
 
 	auto program = _manager->getShader("spriteShader");
 
+	_startScreen = std::make_shared<StartScreen>(_manager->startScreen(), *_manager);
 	_level = std::make_shared<game::Level>(_manager->levels().back(), *_manager);
 
 	_physicsEngine->currentLevel(_level);
@@ -100,8 +150,8 @@ bool Game::init()
 
 	_physicsEngine->addDynamicObject(_tank);
 
-	_glfwWindowSize.x = _level->getLevelWidth();
-	_glfwWindowSize.y = _level->getLevelHeight();
+	_glfwWindowSize.x = _level->getStateWidth();
+	_glfwWindowSize.y = _level->getStateHeight();
 
 	glm::mat4 projection = glm::ortho(0.0F, static_cast<float>(_glfwWindowSize.x), 0.0F, static_cast<float>(_glfwWindowSize.y), -100.0F, 100.F);
 
@@ -112,13 +162,35 @@ bool Game::init()
 	return true;
 }
 
-size_t Game::getCurrentLevelWidth() const
+size_t Game::getCurrentWidth() const
 {
-	return _level->getLevelWidth();
+	switch (_currentGameState)
+	{
+		case GameState::StartScreen: {
+			return _startScreen->getStateWidth();
+		}
+		case GameState::Level: {
+			return _level->getStateWidth();
+		}
+		default: {
+			throw std::runtime_error("non implemented case in getCurrentWidth");
+		}
+	}
 }
 
-size_t Game::getCurrentLevelHeight() const
+size_t Game::getCurrentHeight() const
 {
-	return _level->getLevelHeight();
+	switch (_currentGameState)
+	{
+		case GameState::StartScreen: {
+			return _startScreen->getStateHeight();
+		}
+		case GameState::Level: {
+			return _level->getStateHeight();
+		}
+		default: {
+			throw std::runtime_error("non implemented case in getCurrentHeigh");
+		}
+	}
 }
 }// namespace game

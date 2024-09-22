@@ -18,6 +18,7 @@ namespace game
 {
 class Tank;
 class Level;
+class StartScreen;
 
 class Game
 {
@@ -27,13 +28,19 @@ private:
 	glm::ivec2 _glfwWindowSize;
 	enum class GameState
 	{
-		Active,
+		StartScreen,
+		LevelStart,
+		Level,
 		Pause,
+		Scores,
+		GameOver,
 	} _currentGameState;
 	std::array<bool, 350> _keys;
 
 	std::shared_ptr<Tank> _tank;
 	std::shared_ptr<Level> _level;
+
+	std::shared_ptr<game::StartScreen> _startScreen;
 
 public:
 	Game(const std::shared_ptr<resources::ResourceManager> & manager, const std::shared_ptr<physics::PhysicsEngine> & _physicsEngine, const glm::ivec2 glfwWindowSize);
@@ -45,7 +52,7 @@ public:
 
 	bool init();
 
-	size_t getCurrentLevelWidth() const;
-	size_t getCurrentLevelHeight() const;
+	size_t getCurrentWidth() const;
+	size_t getCurrentHeight() const;
 };
 }// namespace game

@@ -281,6 +281,24 @@ bool ResourceManager::loadJSON(const std::string & JSONPath)
 		}
 	}
 
+	auto startScreenIterator = document.FindMember("start_screen");
+	if (startScreenIterator != document.MemberEnd()) {
+		const auto descriptionArray = startScreenIterator->value.GetArray();
+		size_t maxLength = 0;
+		for (const auto& currentRow : descriptionArray) {
+			_startScreen.emplace_back(currentRow.GetString());
+			if (maxLength < _startScreen.back().length()) {
+				maxLength = _startScreen.back().length();
+			}
+		}
+
+		for (auto & currentRow : _startScreen) {
+			while (currentRow.length() < maxLength) {
+				currentRow.push_back('F');
+			}
+		}
+	}
+
 	auto levelsIterator = document.FindMember("levels");
 	if (levelsIterator != document.MemberEnd())
 	{
@@ -312,6 +330,10 @@ const ResourceManager::LevelStorage & ResourceManager::levels() const
 	return _levels;
 }
 
+const std::vector<std::string> & ResourceManager::startScreen() const
+{
+	return _startScreen;
+}
 
 std::string ResourceManager::getPath(const std::string & relativePath) const
 {

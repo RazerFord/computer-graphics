@@ -29,6 +29,8 @@ private:
 	SpriteStorage _spriteStorage;
 	LevelStorage _levels;
 
+	std::vector<std::string> _startScreen;
+
 public:
 	ResourceManager(const std::string & pathToExecutable);
 	~ResourceManager() = default;
@@ -46,7 +48,8 @@ public:
 
 	bool loadJSON(const std::string & JSONPath);
 
-	const LevelStorage& levels() const;
+	const LevelStorage & levels() const;
+	const std::vector<std::string> & startScreen() const;
 
 private:
 	std::string getPath(const std::string & relativePath) const;

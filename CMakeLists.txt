@@ -27,8 +27,6 @@ add_executable(BattleCity
     src/resources/stb_image.h
     src/game/Game.hpp
     src/game/Game.cpp
-    src/game/Level.hpp
-    src/game/Level.cpp
     src/game/gameobjects/Border.hpp
     src/game/gameobjects/Border.cpp
     src/game/gameobjects/ConcreteWall.hpp
@@ -53,6 +51,11 @@ add_executable(BattleCity
     src/utils/Timer.cpp
     src/physics/PhysicsEngine.hpp
     src/physics/PhysicsEngine.cpp
+    src/game/gamestates/GameState.hpp
+    src/game/gamestates/StartScreen.hpp
+    src/game/gamestates/StartScreen.cpp
+    src/game/gamestates/Level.hpp
+    src/game/gamestates/Level.cpp
 )
 
 add_subdirectory(external/glfw)
