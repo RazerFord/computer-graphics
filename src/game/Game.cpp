@@ -35,28 +35,9 @@ void Game::render()
 
 void Game::update(const double delta)
 {
-	switch (_currentGameState)
-	{
-		case GameState::StartScreen: {
-			if (_keys[GLFW_KEY_ENTER])
-			{
-				_currentGameState = GameState::Level;
-				startNewLevel(1);
-			}
-			break;
-		}
-
-		case GameState::Level: {
-			_gameState->processInput(_keys);
-			_gameState->update(delta);
-			_physicsEngine->update(delta);
-			break;
-		}
-
-		default: {
-			throw std::runtime_error("non implemented case in update");
-		}
-	}
+	_gameState->processInput(_keys);
+	_gameState->update(delta);
+	_physicsEngine->update(delta);
 }
 
 void Game::setKey(const int key, const int action)
@@ -70,7 +51,7 @@ bool Game::init()
 	_program = _manager->getShader("spriteShader");
 	_program->use();
 	_program->setInt("tex", 0);
-	_gameState = std::make_shared<StartScreen>(_manager->startScreen(), *_manager);
+	_gameState = std::make_shared<StartScreen>(_manager->startScreen(), *_manager, this);
 	setWindowSize(_glfwWindowSize);
 	return true;
 }
