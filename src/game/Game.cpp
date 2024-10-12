@@ -11,7 +11,6 @@
 #include <glm/ext/vector_float2.hpp>
 #include <glm/glm.hpp>
 #include <memory>
-#include <stdexcept>
 
 namespace game
 {

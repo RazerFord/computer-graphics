@@ -253,10 +253,7 @@ const glm::ivec2 Level::getEnemyRespawn3() const
 void Level::initPhysics()
 {
 	_tank = std::make_shared<game::Tank>(
-		_manager->getSprite("player1_yellow_tank_type1_sprite_top"),
-		_manager->getSprite("player1_yellow_tank_type1_sprite_right"),
-		_manager->getSprite("player1_yellow_tank_type1_sprite_bottom"),
-		_manager->getSprite("player1_yellow_tank_type1_sprite_left"),
+		Tank::ETank::Player1YellowTankType2,
 		_physicsEngine,
 		*_manager,
 		0.05F,

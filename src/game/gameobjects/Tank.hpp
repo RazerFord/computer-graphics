@@ -30,6 +30,38 @@ class Bullet;
 
 class Tank : public IGameObject
 {
+public:
+	enum class ETank
+	{
+		Player1YellowTankType1,
+		Player1YellowTankType2,
+		Player1YellowTankType3,
+		Player1YellowTankType4,
+
+		Player2GreenTankType1,
+		Player2GreenTankType2,
+		Player2GreenTankType3,
+		Player2GreenTankType4,
+
+		EnemyWhiteTankType1,
+		EnemyWhiteTankType2,
+		EnemyWhiteTankType3,
+		EnemyWhiteTankType4,
+
+		EnemyGreenTankType1,
+		EnemyGreenTankType2,
+		EnemyGreenTankType3,
+		EnemyGreenTankType4,
+
+		EnemyRedTankType1,
+		EnemyRedTankType2,
+		EnemyRedTankType3,
+		EnemyRedTankType4,
+	};
+
+	static const std::vector<std::string> TankTypeToSpriteString;
+	const std::string& getTankSpriteFromType(const ETank type);
+
 private:
 	Orientation _orientation;
 	std::shared_ptr<render::Sprite> _spriteUp;
@@ -56,10 +88,7 @@ private:
 	std::shared_ptr<physics::PhysicsEngine> _physicsEngine;
 
 public:
-	Tank(const std::shared_ptr<render::Sprite> & spriteUp,
-		 const std::shared_ptr<render::Sprite> & spriteRight,
-		 const std::shared_ptr<render::Sprite> & spriteDown,
-		 const std::shared_ptr<render::Sprite> & spriteLeft,
+	Tank(const ETank type,
 		 const std::shared_ptr<physics::PhysicsEngine> & physicsEngine,
 		 const resources::ResourceManager & manager,
 		 const double maxVelocity,

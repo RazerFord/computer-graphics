@@ -6,10 +6,40 @@
 
 namespace game
 {
-Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
-		   const std::shared_ptr<render::Sprite> & spriteRight,
-		   const std::shared_ptr<render::Sprite> & spriteDown,
-		   const std::shared_ptr<render::Sprite> & spriteLeft,
+const std::vector<std::string> Tank::TankTypeToSpriteString{
+	"player1_yellow_tank_type1_sprite",
+	"player1_yellow_tank_type2_sprite",
+	"player1_yellow_tank_type3_sprite",
+	"player1_yellow_tank_type4_sprite",
+
+	"player1_green_tank_type1_sprite",
+	"player2_green_tank_type2_sprite",
+	"player3_green_tank_type3_sprite",
+	"player4_green_tank_type4_sprite",
+
+	"enemy_white_tank_type1_sprite",
+	"enemy_white_tank_type2_sprite",
+	"enemy_white_tank_type3_sprite",
+	"enemy_white_tank_type4_sprite",
+
+	"enemy_green_tank_type1_sprite",
+	"enemy_green_tank_type2_sprite",
+	"enemy_green_tank_type3_sprite",
+	"enemy_green_tank_type4_sprite",
+
+	"enemy_red_tank_type1_sprite",
+	"enemy_red_tank_type2_sprite",
+	"enemy_red_tank_type3_sprite",
+	"enemy_red_tank_type4_sprite",
+};
+
+const std::string & Tank::getTankSpriteFromType(const Tank::ETank type)
+{
+	return TankTypeToSpriteString[static_cast<int>(type)];
+}
+
+
+Tank::Tank(const ETank type,
 		   const std::shared_ptr<physics::PhysicsEngine> & physicsEngine,
 		   const resources::ResourceManager & manager,
 		   const double maxVelocity,
@@ -18,16 +48,16 @@ Tank::Tank(const std::shared_ptr<render::Sprite> & spriteUp,
 		   const float layer)
 	: IGameObject(GameObjectType::Tank, position, size, 0.0F, layer)
 	, _orientation(Orientation::Up)
-	, _spriteUp(spriteUp)
-	, _spriteRight(spriteRight)
-	, _spriteDown(spriteDown)
-	, _spriteLeft(spriteLeft)
+	, _spriteUp(manager.getSprite(getTankSpriteFromType(type) + "_top"))
+	, _spriteRight(manager.getSprite(getTankSpriteFromType(type) + "_right"))
+	, _spriteDown(manager.getSprite(getTankSpriteFromType(type) + "_bottom"))
+	, _spriteLeft(manager.getSprite(getTankSpriteFromType(type) + "_left"))
 	, _spriteRespawn(manager.getSprite("respawn"))
 	, _spriteShield(manager.getSprite("shield"))
-	, _spriteAnimatorUp(spriteUp)
-	, _spriteAnimatorRight(spriteRight)
-	, _spriteAnimatorDown(spriteDown)
-	, _spriteAnimatorLeft(spriteLeft)
+	, _spriteAnimatorUp(manager.getSprite(getTankSpriteFromType(type) + "_top"))
+	, _spriteAnimatorRight(manager.getSprite(getTankSpriteFromType(type) + "_right"))
+	, _spriteAnimatorDown(manager.getSprite(getTankSpriteFromType(type) + "_bottom"))
+	, _spriteAnimatorLeft(manager.getSprite(getTankSpriteFromType(type) + "_left"))
 	, _spriteAnimatorRespawn(_spriteRespawn)
 	, _spriteAnimatorShield(_spriteShield)
 	, _maxVelocity(maxVelocity)
